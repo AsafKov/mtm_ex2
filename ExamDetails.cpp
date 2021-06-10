@@ -1,7 +1,5 @@
 #include "ExamDetails.h"
 
-const string ExamDetails:
-
 ExamDetails::ExamDetails(int courseId, int examMonth, int examDay, double examHour, int examLength, string zoomLink) {
     this->courseId = courseId;
     this->examDay = examDay;
@@ -53,5 +51,5 @@ ExamDetails::ExamDetails(const ExamDetails &exam) {
 }
 
 ExamDetails ExamDetails::makeMatamExam() {
-    return ExamDetails(1, 2, 3, 4, 5, DEFAULT_ZOOM_LINK);
+    return ExamDetails(1, 2, 3, 4, 5, "DEFAULT_ZOOM_LINK");
 }
