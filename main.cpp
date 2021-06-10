@@ -41,16 +41,16 @@ int main()
 
     TEST("1.3")
     closest.setLink("https://tinyurl.com/ym8wf46t");
-//    cout << closest << endl;
+    cout << closest << endl;
 
-//    TEST("1.4")
-//    try {
-//        ExamDetails exam4(236506, 42, 0, 13, 3, "https://tinyurl.com/ym8wf46t");
-//        cout << exam4 << endl;
-//    }
-//    catch (ExamDetails::InvalidDateException& e) {
-//        cout << "invalid date" << endl;
-//    }
+    TEST("1.4")
+    try {
+        ExamDetails exam4(236506, 42, 0, 13, 3, "https://tinyurl.com/ym8wf46t");
+        cout << exam4 << endl;
+    }
+    catch (ExamDetails::InvalidDateException& e) {
+        cout << "invalid date" << endl;
+    }
 
 //
 //    TEST("1.5")
