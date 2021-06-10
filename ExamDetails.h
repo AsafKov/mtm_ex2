@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 using std::string;
+using std::cout;
 #define MTM_EX2_EXAMDETAILS_H
 
 class ExamDetails {
@@ -19,7 +20,9 @@ public:
     int operator-(const ExamDetails &exam) const;
     bool operator<(const ExamDetails &exam) const;
     ExamDetails& operator=(const ExamDetails &exam);
+    void operator<<(const ExamDetails &exam);
     ExamDetails(const ExamDetails &exam);
+
     static ExamDetails makeMatamExam();
 };
 

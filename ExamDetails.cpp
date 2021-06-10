@@ -53,3 +53,7 @@ ExamDetails::ExamDetails(const ExamDetails &exam) {
 ExamDetails ExamDetails::makeMatamExam() {
     return ExamDetails(1, 2, 3, 4, 5, "DEFAULT_ZOOM_LINK");
 }
+
+void ExamDetails::operator<<(const ExamDetails &exam) {
+    cout <<
+}
