@@ -6,7 +6,7 @@ namespace mtm {
 
     class Character {
     private:
-        const static units_t AMMO_COST = 1;
+        static const units_t AMMO_COST = 1;
 
     protected:
         Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, const GridPoint& location = GridPoint(0, 0));
