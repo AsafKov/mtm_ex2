@@ -12,8 +12,9 @@ ExamDetails::ExamDetails(double courseId, double examMonth, double examDay, doub
     this->zoomLink = zoomLink;
 }
 
-string ExamDetails::getLink() const{
 
+
+string ExamDetails::getLink() const{
     return this->zoomLink;
 }
 
