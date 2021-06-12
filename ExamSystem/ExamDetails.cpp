@@ -1,4 +1,4 @@
-#include "headers/ExamDetails.h"
+#include "ExamDetails.h"
 
 ExamDetails::ExamDetails(double courseId, double examMonth, double examDay, double examHour, double duration, string zoomLink) {
     isValidDate(examMonth, examDay);

@@ -12,7 +12,7 @@ class ExamDetails {
 private:
     const static int MONTH_LENGTH = 30;
     const static int YEAR_LENGTH = 12;
-    const static int MATAM_COURSE_NUMBER = -1;
+    const static int MATAM_COURSE_NUMBER = 234124;
     const static int MATAM_EXAM_MONTH = 7;
     const static int MATAM_EXAM_DAY = 28;
     const static int MATAM_EXAM_HOUR = 13;

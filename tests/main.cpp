@@ -1,8 +1,6 @@
-//
-// Created by ittay on 3/9/2021.
-//
 #include <iostream>
-#include "../headers/ExamDetails.h"
+#include "../SortedList/SortedList.h"
+#include "../ExamSystem/ExamDetails.h"
 
 using std::cout;
 using std::endl;
@@ -19,13 +17,13 @@ bool isTrollLink(const ExamDetails& exam) {
     return (exam.getLink().find("tinyurl") != string::npos);
 }
 
-//template<class T>
-//void printList(SortedList<T> list) {
-//    for (auto it = list.begin(); !(it == list.end()); ++it) {
-//        cout << *it << endl;
-//    }
-//    cout << endl;
-//}
+template<class T>
+void printList(SortedList<T> list) {
+    for (auto it = list.begin(); !(it == list.end()); ++it) {
+        cout << *it << endl;
+    }
+    cout << endl;
+}
 
 int main()
 {
@@ -37,7 +35,7 @@ int main()
 
     TEST("1.2")
     ExamDetails& closest = (exam1 < exam2) ? exam1 : exam2;
-//    cout << "your closest exam is:" << endl << closest << endl;
+    cout << "your closest exam is:" << endl << closest << endl;
 
     TEST("1.3")
     closest.setLink("https://tinyurl.com/ym8wf46t");
@@ -52,27 +50,26 @@ int main()
         cout << "invalid date" << endl;
     }
 
-//
-//    TEST("1.5")
-//    SortedList<string> lst1 = SortedList<string>();
-//    lst1.insert("Charlie");
-//    lst1.insert("Bob");
-//    lst1.insert("Alice");
-//    lst1.insert("Donald");
-//
-//    printList(lst1);
-//
-//    TEST("1.6")
-//    SortedList<ExamDetails> lst2;
-//    lst2.insert(exam1);
-//    lst2.insert(exam2);
-//
-//    printList(lst2);
-//
-//    TEST("1.7")
-//    SortedList<string> lst3 = lst1;
-//    printList(lst3);
-//
+    TEST("1.5")
+    SortedList<string> lst1 = SortedList<string>();
+    lst1.insert("Charlie");
+    lst1.insert("Bob");
+    lst1.insert("Alice");
+    lst1.insert("Donald");
+
+    printList(lst1);
+
+    TEST("1.6")
+    SortedList<ExamDetails> lst2;
+    lst2.insert(exam1);
+    lst2.insert(exam2);
+
+    printList(lst2);
+
+    TEST("1.7")
+    SortedList<string> lst3 = lst1;
+    printList(lst3);
+
 //    TEST("1.8")
 //    lst3 = lst3.apply(getLen);
 //    printList(lst3);
