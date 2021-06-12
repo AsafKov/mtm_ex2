@@ -2,11 +2,11 @@
 
 namespace mtm {
 
-    Character::Character(Team team, units_t health, units_t ammo, units_t range, units_t power, const GridPoint& location) {
+    Character::Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, const GridPoint& location) {
         this->team = team;
         this->health = health;
         this->ammo = ammo;
-        this->range = range;
+        this->attack_range = attack_range;
         this->power = power;
         this->location = location;
     }
@@ -15,7 +15,7 @@ namespace mtm {
         return team;
     }
 
-    bool  Character::isTeamMember(const Character* character) const {
+    bool Character::isTeamMember(const Character* character) const {
         return character->team == this->team;
     }
 
@@ -32,7 +32,11 @@ namespace mtm {
     }
 
     units_t Character::getAmmoCost() const {
-        return this->DEFAULT_AMMO_COST;
+        return this->AMMO_COST;
+    }
+
+    units_t Character::getTargetAmmoCost(const Character* target) const {
+        return target->AMMO_COST;
     }
 
     units_t Character::distance(const GridPoint& point) const {
@@ -40,7 +44,7 @@ namespace mtm {
     }
 
     bool Character::isInAttackRange(const GridPoint& point) const {
-        return distance(point) <= this->range;
+        return distance(point) <= this->attack_range;
     }
 
     void Character::setLocation(const GridPoint& location) {
@@ -50,10 +54,5 @@ namespace mtm {
     GridPoint Character::getLocation() const {
         return location;
     }
-
-
-
-//    void Character::dealAreaOfEffectDamage(const GridPoint& attack_location,
-//                                           Character* character) const {}
 
 }
