@@ -1,4 +1,3 @@
-
 #ifndef CHARACTER
 #define CHARACTER
 #include "Auxiliaries.h"

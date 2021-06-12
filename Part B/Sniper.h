@@ -10,7 +10,7 @@ namespace mtm {
         units_t reload_credit = 2;
         units_t move_range = 4;
         units_t min_attack_area_range = (attack_range+1)/2;
-        units_t max_attack_area_range = attack_range;
+        units_t max_attack_area_range = attack_range; //see if ring should affect the range from the higher radius.
         units_t attack_area_damage = (power+1)/2;
 
     public:
