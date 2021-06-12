@@ -1,30 +1,5 @@
 #include "headers/ExamDetails.h"
 
-void ExamDetails::isValidDate(double examMonth, double examDay) {
-    double decimal_diff_day = examDay - (int)examDay;
-    double decimal_diff_month = examMonth - (int)examMonth;
-    if(decimal_diff_month != 0 || decimal_diff_day != 0){
-        throw InvalidDateException();
-    }
-    if (examMonth < 1 || examMonth > 12 || examDay < 0 || examDay > 30){
-        throw InvalidDateException();
-    }
-}
-
-void ExamDetails::isValidTime(double examHour) {
-    double decimal_diff = (examHour - (int)examHour);
-    if((decimal_diff != 0 && decimal_diff != 0.5) || examHour < 0){
-        throw InvalidTimeException();
-    }
-}
-
-void ExamDetails::isValidArgs(double courseNumber) {
-    double decimal_diff = courseNumber - (int)courseNumber;
-    if(decimal_diff != 0 || courseNumber < 0){
-        throw InvalidArgsException();
-    }
-}
-
 ExamDetails::ExamDetails(double courseId, double examMonth, double examDay, double examHour, double duration, string zoomLink) {
     isValidDate(examMonth, examDay);
     isValidTime(examHour);
@@ -47,8 +22,8 @@ void ExamDetails::setLink(const string link) {
 }
 
 int ExamDetails::operator-(const ExamDetails &exam) const {
-    int exam1_days_total = this->examMonth*30 + this->examDay;
-    int exam2_days_total = exam.examMonth*30 + exam.examDay;
+    int exam1_days_total = this->examMonth*MONTH_LENGTH + this->examDay;
+    int exam2_days_total = exam.examMonth*MONTH_LENGTH + exam.examDay;
 
     return exam1_days_total-exam2_days_total;
 }
@@ -80,7 +55,8 @@ ExamDetails::ExamDetails(const ExamDetails &exam) {
 }
 
 ExamDetails ExamDetails::makeMatamExam() {
-    return ExamDetails(1, 7, 28, 4, 5, "DEFAULT_ZOOM_LINK");
+    return ExamDetails(MATAM_COURSE_NUMBER, MATAM_EXAM_MONTH, MATAM_EXAM_DAY, MATAM_EXAM_HOUR,
+                       MATAM_EXAM_HOUR, "DEFAULT_ZOOM_LINK");
 }
 
 ostream& operator<<(ostream &os, const ExamDetails &exam) {
@@ -90,4 +66,28 @@ ostream& operator<<(ostream &os, const ExamDetails &exam) {
 }
 
 
+void ExamDetails::isValidDate(double examMonth, double examDay) {
+    double decimal_diff_day = examDay - (int)examDay;
+    double decimal_diff_month = examMonth - (int)examMonth;
+    if(decimal_diff_month != 0 || decimal_diff_day != 0){
+        throw InvalidDateException();
+    }
+    if (examMonth < 1 || examMonth > YEAR_LENGTH || examDay < 0 || examDay > MONTH_LENGTH){
+        throw InvalidDateException();
+    }
+}
+
+void ExamDetails::isValidTime(double examHour) {
+    double decimal_diff = (examHour - (int)examHour);
+    if((decimal_diff != 0 && decimal_diff != 0.5) || examHour < 0){
+        throw InvalidTimeException();
+    }
+}
+
+void ExamDetails::isValidArgs(double courseNumber) {
+    double decimal_diff = courseNumber - (int)courseNumber;
+    if(decimal_diff != 0 || courseNumber < 0){
+        throw InvalidArgsException();
+    }
+}
 
