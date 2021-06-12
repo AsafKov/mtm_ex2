@@ -1,4 +1,4 @@
-#include "ExamDetails.h"
+#include "headers/ExamDetails.h"
 
 void ExamDetails::isValidDate(double examMonth, double examDay) {
     double decimal_diff_day = examDay - (int)examDay;

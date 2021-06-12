@@ -2,7 +2,7 @@
 // Created by ittay on 3/9/2021.
 //
 #include <iostream>
-#include "ExamDetails.h"
+#include "../headers/ExamDetails.h"
 
 using std::cout;
 using std::endl;

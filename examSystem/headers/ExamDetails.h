@@ -37,8 +37,6 @@ private:
     static void isValidArgs(double courseNumber);
 };
 
-
-
 ostream& operator<<(ostream &os, const ExamDetails &exam);
 
 #endif //MTM_EX2_EXAMDETAILS_H
