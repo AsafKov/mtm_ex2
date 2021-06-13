@@ -12,11 +12,11 @@ class ExamDetails {
 private:
     const static int MONTH_LENGTH = 30;
     const static int YEAR_LENGTH = 12;
-    const static int MATAM_COURSE_NUMBER = -1;
+    const static int MATAM_COURSE_NUMBER = 234124;
     const static int MATAM_EXAM_MONTH = 7;
     const static int MATAM_EXAM_DAY = 28;
     const static int MATAM_EXAM_HOUR = 13;
-    const static int MATAM_EXAM_LENGTH = 3;
+    const static int MATAM_EXAM_DURATION = 3;
 
     int courseId;
     int examMonth;
@@ -29,7 +29,8 @@ private:
     static void isValidArgs(double courseNumber);
 
 public:
-    ExamDetails(double courseId, double examMonth, double examDay, double examHour, double examLength, string zoomLink="");
+    ExamDetails(double courseId, double examMonth, double examDay, double examHour, double examLength,
+                string zoomLink=" ");
     string getLink() const;
     void setLink(string link);
     int operator-(const ExamDetails &exam) const;

@@ -1,4 +1,4 @@
-#include "headers/ExamDetails.h"
+#include "ExamDetails.h"
 
 ExamDetails::ExamDetails(double courseId, double examMonth, double examDay, double examHour, double duration, string zoomLink) {
     isValidDate(examMonth, examDay);
@@ -11,8 +11,6 @@ ExamDetails::ExamDetails(double courseId, double examMonth, double examDay, doub
     this->examMonth = (int)examMonth;
     this->zoomLink = zoomLink;
 }
-
-
 
 string ExamDetails::getLink() const{
     return this->zoomLink;
@@ -30,7 +28,7 @@ int ExamDetails::operator-(const ExamDetails &exam) const {
 }
 
 bool ExamDetails::operator<(const ExamDetails &exam) const{
-    return this - &exam < 0;
+    return (*this - exam) < 0;
 }
 
 //TODO: validate string handling method
@@ -57,15 +55,14 @@ ExamDetails::ExamDetails(const ExamDetails &exam) {
 
 ExamDetails ExamDetails::makeMatamExam() {
     return ExamDetails(MATAM_COURSE_NUMBER, MATAM_EXAM_MONTH, MATAM_EXAM_DAY, MATAM_EXAM_HOUR,
-                       MATAM_EXAM_HOUR, "DEFAULT_ZOOM_LINK");
+                       MATAM_EXAM_DURATION, "https://tinyurl.com/59hzps6m");
 }
 
 ostream& operator<<(ostream &os, const ExamDetails &exam) {
     return os << "Course Number: " << exam.courseId << endl << "Time: " << exam.examDay << "." << exam.examMonth << " at "
         << (int)exam.examHour << ":" << (double)(exam.examHour - (int)exam.examHour)*60 << endl << "Duration: "
-        << exam.duration <<".00"<< endl << "Zoom Link: " << exam.zoomLink;
+        << exam.duration <<":00"<< endl << "Zoom Link: " << exam.zoomLink << endl;
 }
-
 
 void ExamDetails::isValidDate(double examMonth, double examDay) {
     double decimal_diff_day = examDay - (int)examDay;
