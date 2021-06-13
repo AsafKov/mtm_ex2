@@ -10,10 +10,8 @@ private:
         ListNode *nextNode;
 
         explicit ListNode(T value) : nextNode(nullptr), value(value) {};
-
         ListNode() = default;
     };
-
     ListNode *head = nullptr;
     int listLength;
 public:
@@ -27,11 +25,15 @@ public:
 
     ~SortedList<T>();
 
+    void clearList();
+
     template<class Condition>
-    SortedList<T> &filter(Condition condition) const;
+    SortedList<T> filter(Condition condition) const;
 
     template<class Modifier>
-    SortedList<T> &apply(Modifier modifier) const;
+    SortedList<T> apply(Modifier modifier) const;
+
+    void copyListContent(const SortedList<T> &from);
 
     void remove(Iterator iterator);
 
@@ -41,29 +43,31 @@ public:
 
     int length() const;
 
+    SortedList<T> &operator=(const SortedList<T> &list);
+
     void insert(T newElement);
 };
 
 template<class T>
 template<class Condition>
-SortedList<T> &SortedList<T>::filter(Condition condition) const {
-    SortedList<T> *filtered_list = new SortedList<T>();
+SortedList<T> SortedList<T>::filter(Condition condition) const {
+    SortedList<T> filtered_list = SortedList<T>();
     for (Iterator iterator = begin(); !(iterator == end()); ++iterator) {
         if (condition(*iterator)) {
-            filtered_list->insert(*iterator);
+            filtered_list.insert(*iterator);
         }
     }
-    return *filtered_list;
+    return filtered_list;
 }
 
 template<class T>
 template<class Modifier>
-SortedList<T> &SortedList<T>::apply(Modifier modifier) const {
-    SortedList<T> *modified_list = new SortedList<T>();
+SortedList<T> SortedList<T>::apply(Modifier modifier) const {
+    SortedList<T> modified_list = SortedList<T>();
     for (Iterator iterator = begin(); !(iterator == end()); ++iterator) {
-        modified_list->insert(modifier(*iterator));
+        modified_list.insert(modifier(*iterator));
     }
-    return *modified_list;
+    return modified_list;
 }
 
 template<class T>
@@ -71,27 +75,12 @@ SortedList<T>::SortedList() : listLength(0) {}
 
 template<class T>
 SortedList<T>::SortedList(const SortedList &list) : listLength(list.listLength) {
-    if (listLength == 0) {
-        return;
-    }
-    ListNode *dummy = list.head->nextNode;
-    head = new ListNode(list.head->value);
-    ListNode *current_node = head;
-    for (int i = 1; i < listLength; i++) {
-        current_node->nextNode = new ListNode(dummy->value);
-        dummy = dummy->nextNode;
-        current_node = current_node->nextNode;
-    }
+    copyListContent(list);
 }
 
 template<class T>
 SortedList<T>::~SortedList<T>() {
-    ListNode *to_delete = nullptr;
-    while (head != nullptr) {
-        to_delete = head;
-        head = head->nextNode;
-        delete to_delete;
-    }
+    clearList();
 }
 
 template<class T>
@@ -189,6 +178,41 @@ void SortedList<T>::remove(SortedList::Iterator iterator) {
     }
     iterator.currentIndex--;
     listLength--;
+}
+
+template<class T>
+SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
+    if(this == &list){
+        return *this;
+    }
+    listLength = list.length();
+    copyListContent(list);
+}
+
+template<class T>
+void SortedList<T>::copyListContent(const SortedList<T> &from) {
+    clearList();
+    if(from.listLength == 0){
+        return;
+    }
+    ListNode *dummy = from.head->nextNode;
+    head = new ListNode(from.head->value);
+    ListNode *current_node = head;
+    for (int i = 1; i < listLength; i++) {
+        current_node->nextNode = new ListNode(dummy->value);
+        dummy = dummy->nextNode;
+        current_node = current_node->nextNode;
+    }
+}
+
+template<class T>
+void SortedList<T>::clearList() {
+    ListNode *to_delete = nullptr;
+    while (head != nullptr) {
+        to_delete = head;
+        head = head->nextNode;
+        delete to_delete;
+    }
 }
 
 template<class T>
