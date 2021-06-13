@@ -15,11 +15,11 @@ namespace mtm {
         return team;
     }
 
-    bool Character::isTeamMember(const Character* character) const {
+    bool Character::isTeamMember(Character* character) const{
         return character->team == this->team;
     }
 
-    void Character::setDamage(units_t damage){
+    void Character::doDamage(units_t damage){
         this->health-=damage;
     }
 
@@ -39,12 +39,12 @@ namespace mtm {
         return target->AMMO_COST;
     }
 
-    units_t Character::distance(const GridPoint& point) const {
-        return GridPoint::distance(location, point);
+    units_t Character::distanceFromCurrentLocation(const GridPoint& point) const {
+        return GridPoint::distance(this->location, point);
     }
 
     bool Character::isInAttackRange(const GridPoint& point) const {
-        return distance(point) <= this->attack_range;
+        return distanceFromCurrentLocation(point) <= this->attack_range;
     }
 
     void Character::setLocation(const GridPoint& location) {

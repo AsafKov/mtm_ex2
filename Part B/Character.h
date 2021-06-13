@@ -20,13 +20,13 @@ namespace mtm {
 
     public:
         Team getTeam() const;
-        bool  isTeamMember(const Character* character) const;
-        void setDamage(units_t damage);
+        bool  isTeamMember(Character* character) const;
+        void doDamage(units_t damage);
         bool isDead() const;
         units_t getAmmoCount() const;
         units_t getAmmoCost() const;
         units_t getTargetAmmoCost(const Character* target) const;
-        units_t distance(const GridPoint& point) const;
+        units_t distanceFromCurrentLocation(const GridPoint& point) const;
         bool isInAttackRange(const GridPoint& point) const;
         void setLocation(const GridPoint& location);
         GridPoint getLocation() const;

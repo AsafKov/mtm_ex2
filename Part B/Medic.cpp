@@ -7,11 +7,25 @@ namespace mtm {
     }
 
     bool Medic::isInMoveRange(const GridPoint& point) const {
-        return distance(point) <= this->move_range;
+        return distanceFromCurrentLocation(point) <= this->move_range;
     }
 
     void Medic::reload() {
         this->ammo += this->reload_credit;
+    }
+
+    void Medic::attack(Character* target,const GridPoint& destination) {
+        if (target == NULL || this->location == target->getLocation()){
+            throw //todo: invalid target
+        }
+        if(!this->isInAttackRange(destination)){
+            throw //todo: invalid location
+        }
+        if(this->ammo){
+            throw //todo: no ammo
+        }
+        this->ammo -= getAmmoCost();
+        target->doDamage(this->power);
     }
 }
 
