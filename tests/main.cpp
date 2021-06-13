@@ -20,7 +20,12 @@ bool isTrollLink(const ExamDetails& exam) {
 template<class T>
 void printList(SortedList<T> list) {
     for (auto it = list.begin(); !(it == list.end()); ++it) {
-        cout << *it << endl;
+        try{
+            cout << *it << endl;
+        } catch (typename SortedList<T>::OutOfBoundsException &exception) {
+            cout << exception.what();
+            break;
+        }
     }
     cout << endl;
 }
@@ -70,20 +75,19 @@ int main()
     SortedList<string> lst3 = lst1;
     printList(lst3);
 
-//    TEST("1.8")
-//    lst3 = lst3.apply(getLen);
-//    printList(lst3);
-//
-//
-//    TEST("1.9")
-//    lst3.remove(lst3.begin());
-//    printList(lst3);
-//
-//    TEST("1.10")
-//    SortedList<ExamDetails> lst4 = lst2.filter(isTrollLink);
-//    printList(lst2);
-//    cout << "----------" << endl;
-//    printList(lst4);
+    TEST("1.8")
+    lst3 = lst3.apply(getLen);
+    printList(lst3);
+
+    TEST("1.9")
+    lst3.remove(lst3.begin());
+    printList(lst3);
+
+    TEST("1.10")
+    SortedList<ExamDetails> lst4 = lst2.filter(isTrollLink);
+    printList(lst2);
+    cout << "----------" << endl;
+    printList(lst4);
 
     return 0;
 }
