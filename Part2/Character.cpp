@@ -22,6 +22,14 @@ namespace mtm {
         return ammo;
     }
 
+    units_t Character::getAttackRange() const{
+        return attack_range;
+    }
+
+    units_t Character::getPower() const{
+        return power;
+    }
+
     units_t Character::getAmmoCost() const {
         return mtm::Character::AMMO_COST;
     }

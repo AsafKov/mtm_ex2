@@ -17,22 +17,14 @@ namespace mtm {
         this->ammo += mtm::Soldier::RELOAD_CREDIT;
     }
 
-    void Soldier::attack(Character* target,const GridPoint& destination) {
-        if (target == NULL) {
+    void Soldier::attack(Character* target, const GridPoint& destination) {
+        if ((destination.col != this->location.col) && (destination.row != this->location.col)) {
+            //todo: invalid location
+        }
+        if (target == nullptr) {
             return;
         }
-        if(!this->isInAttackRange(destination)){
-             //todo: invalid location
-        }
-        if ((destination.col != this->location.col) && (destination.row != this->location.col)) {
-             //todo: invalid location
-        }
-        if(this->ammo){
-            //todo: no ammo
-        }
         this->ammo -= getAmmoCost();
-        target->doDamage(this->power);
-//        doAttackedAreaDamage();
     }
 
     bool Soldier::isDestinationInRange(GridPoint dst_coordinates) const{

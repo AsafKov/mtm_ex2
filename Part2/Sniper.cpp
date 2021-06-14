@@ -18,20 +18,13 @@ namespace mtm {
     }
 
     void Sniper::attack(Character *target, const GridPoint &destination) {
-        if (target == nullptr || isTeamMember(target)) {
+        if (target == nullptr) {
             //todo: invalid target
         }
-        if (!this->isInAttackRange(destination)) {
-            //todo: invalid location
-        }
-        if (this->ammo) {
-            //todo: no ammo
-        }
-        this->ammo -= getAmmoCost();
         if (isDoubleDamage()) {
             target->doDamage(this->power * 2);
         }
-        target->doDamage(this->power);
+        this->ammo -= getAmmoCost();
     }
 
     bool Sniper::isDestinationInRange(GridPoint dst_coordinates) const {
