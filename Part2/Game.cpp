@@ -30,6 +30,10 @@ namespace mtm {
         }
     }
 
+    units_t Game::distance(const GridPoint& point1, const GridPoint& point2) const {
+        return GridPoint::distance(point1, point2);
+    }
+
     void Game::addCharacter(const Game::GridPoint &coordinates, const SharedPtr &character) {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
@@ -97,37 +101,50 @@ namespace mtm {
         return *it;
     }
 
-    void Game::attack(const GridPoint &src_coordinates, const GridPoint &dst_coordinates) {
-        if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
+    void Game::soldierAreaAttack(Character* attacker, const GridPoint &destination) {
+        if(attacker->getType() == SOLDIER){
+            units_t area_radius = ceil((double)attacker->getAttackRange()/3);
+            units_t area_damage = ceil((double)attacker->getPower()/2);
+            for(units_t i=destination.row-2 ; i <= destination.row+2 ; i++){
+                for(units_t j=destination.col-2 ; j <= destination.col+2 ; j++){
+                    GridPoint damaged_area = getGrid(i,j);
+                    if(distance(damaged_area, destination)<=area_radius){
+                        SharedPtr effected_target = characterInCell(damaged_area);
+                        if (effected_target != nullptr || attacker->isTeamMember(effected_target.get())) {
+                            effected_target->doDamage(area_damage);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    void Game::attack(const GridPoint &attacker_location, const GridPoint &destination) {
+        SharedPtr attacker = characterInCell(attacker_location);
+        SharedPtr target = characterInCell(destination);
+        if(!isValidLocation(attacker_location) || !isValidLocation(destination)){
             throw IllegalCell();
         }
-        SharedPtr character = characterInCell(src_coordinates);
-        if (character == nullptr) {
-            throw CellEmpty();
-        }
-
-        if (!character->isInAttackRange(dst_coordinates)) {
+        if(!attacker->isInAttackRange(destination)){
             throw OutOfRange();
         }
-
-        if (character->getAmmoCount() < character->getAmmoCost()) {
-            throw OutOfAmmo();
-        }
-
-        if (characterInCell(dst_coordinates) == nullptr &&
-            (character->getType() == MEDIC || character->getType() == SNIPER)) {
+        if(attacker->isTeamMember(target.get())){
+            if(attacker->getType() == MEDIC) {
+                target->doDamage(-attacker->getPower());
+                return;
+            }
             throw IllegalTarget();
         }
+        if(attacker->getAmmoCount() < attacker->getAmmoCost()){
+            throw OutOfAmmo();
+        }
+        attacker->attack(target.get(), destination);
+        target->doDamage(attacker->getPower());
+        soldierAreaAttack(attacker.get(), destination);
     }
 
-    void Game::reload(const GridPoint &coordinates) {
-        if (!isValidLocation(coordinates)) {
-            throw IllegalCell();
-        }
-        SharedPtr character = characterInCell(coordinates);
-        if (character == nullptr) {
-            throw CellEmpty();
-        }
-        character->reload();
-    }
 }
+
+
+
