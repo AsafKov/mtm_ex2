@@ -33,7 +33,7 @@ namespace mtm {
 
     bool Sniper::isInAttackRange(GridPoint dst_coordinates) const {
         return distanceFromCurrentLocation(dst_coordinates) <= attack_range
-               && distanceFromCurrentLocation(dst_coordinates) >= attack_range / 2;
+               && distanceFromCurrentLocation(dst_coordinates) >= ceil((double)attack_range/2);
     }
 }
 

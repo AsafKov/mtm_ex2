@@ -25,25 +25,22 @@ namespace mtm {
 
     public:
         ~Character() = default;
-        virtual void reload();
-        virtual bool isDestinationInRange(GridPoint dst_coordinates) const;
-        virtual bool isInAttackRange(GridPoint dst_coordinates) const;
-        virtual void attack();
-        virtual units_t getAmmoCost() const;
+        virtual void reload() = 0;
+        virtual bool isDestinationInRange(GridPoint dst_coordinates) const = 0;
+        virtual bool isInAttackRange(GridPoint dst_coordinates) const = 0;
+        virtual void attack(Character* target, const GridPoint& destination) =0;
         Team getTeam() const;
-        bool  isTeamMember(Character* character) const;
+        bool isTeamMember(Character* character) const;
+        CharacterType getType() const;
+        units_t getPower() const;
+        units_t getAmmoCost() const;
+        units_t getAmmoCount() const;
+        units_t getAttackRange() const;
         void doDamage(units_t damage);
         bool isDead() const;
-        CharacterType getType() const;
-        units_t getAttackRange() const;
-        units_t getPower() const;
-        units_t getAmmoCount() const;
-        units_t getTargetAmmoCost(const Character* target) const;
-        GridPoint getGrid(int x, int y) const;
-        units_t distanceFromCurrentLocation(const GridPoint& point) const;
-        units_t distance(const GridPoint& point1, const GridPoint& point2) const;
-        void setLocation(const GridPoint& location);
         GridPoint getLocation() const;
+        void setLocation(const GridPoint& location);
+        units_t distanceFromCurrentLocation(const GridPoint& point) const;
     };
 
 }

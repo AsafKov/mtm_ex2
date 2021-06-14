@@ -17,12 +17,7 @@ namespace mtm {
         if (target == nullptr || this->location == target->getLocation()){
             //todo: invalid target
         }
-        if (isTeamMember(target)){
-            target->doDamage(-2*power);
-        }
-        else {
-            this->ammo -= getAmmoCost();
-        }
+        this->ammo -= getAmmoCost();
     }
 
     bool Medic::isDestinationInRange(GridPoint dst_coordinates) const {

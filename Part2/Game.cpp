@@ -18,14 +18,18 @@ namespace mtm{
     }
 
     GridPoint Game::getGrid(int x, int y) const {
-        return GridPoint::GridPoint(x,y);
+        return GridPoint(x,y);
     }
 
     units_t Game::distance(const GridPoint& point1, const GridPoint& point2) const {
         return GridPoint::distance(point1, point2);
     }
 
-    void Game::addCharacter(const Game::GridPoint &coordinates,  const SharedPtr& character) {
+    bool Game::isValidLocation(const GridPoint location) const {
+        return (location.row >= 0 && location.row < height) && (location.col >= 0 && location.col < width);
+    }
+
+    void Game::addCharacter(const GridPoint &coordinates,  const SharedPtr& character) {
         if (!isValidLocation(coordinates)) {
             //TODO: throw InvalidCellException
         }
@@ -34,10 +38,6 @@ namespace mtm{
             //TODO: throw exception CellOccupied
         }
         characters.push_back(character);
-    }
-
-    bool Game::isValidLocation(const Game::GridPoint point) const {
-        return (point.row >= 0 && point.row < height) && (point.col >= 0 && point.col < width);
     }
 
     Game::SharedPtr Game::makeCharacter(CharacterType type, Team team, Game::unit_t health, Game::unit_t ammo,
@@ -64,28 +64,10 @@ namespace mtm{
         }
     }
 
-    void Game::move(const GridPoint &src_coordinates, const GridPoint &dst_coordinates) {
-        if(!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)){
-            //TODO: throw invalid coordinates
-        }
-        SharedPtr character = characterInCell(src_coordinates);
-        if(character == nullptr){
-            //TODO: throw empty cell exception
-        }
-        //TODO: can move 0 steps?
-        if(characterInCell(dst_coordinates) != nullptr){
-            //TODO: cell occupied exception
-        }
-        if(!character->isDestinationInRange(dst_coordinates)){
-            //TODO: out of range exception
-        }
-        character->setLocation(dst_coordinates);
-    }
-
-    Game::SharedPtr &Game::characterInCell(const GridPoint &coordinates) {
+    Game::SharedPtr &Game::characterInCell(const GridPoint &location) {
         auto it = characters.begin();
         while (it != characters.end()) {
-            if ((*it)->getLocation() == coordinates) {
+            if ((*it)->getLocation() == location) {
                 return *it;
             }
             it++;
@@ -94,17 +76,35 @@ namespace mtm{
         return *it;
     }
 
-    void Game::soldierAreaAttack(Character* attacker, const GridPoint &dst_coordinates) {
+    void Game::move(const GridPoint &src_location, const GridPoint &dst_location) {
+        SharedPtr character = characterInCell(src_location);
+        if(!isValidLocation(src_location) || !isValidLocation(dst_location)){
+            //TODO: throw invalid coordinates
+        }
+        if(character == nullptr){
+            //TODO: throw empty cell exception
+        }
+        //TODO: can move 0 steps?
+        if(characterInCell(dst_location) != nullptr){
+            //TODO: cell occupied exception
+        }
+        if(!character->isDestinationInRange(dst_location)){
+            //TODO: out of range exception
+        }
+        character->setLocation(dst_location);
+    }
+
+    void Game::soldierAreaAttack(Character* attacker, const GridPoint &destination) {
         if(attacker->getType() == SOLDIER){
-            units_t attack_radius = ceil((double)attacker->getAttackRange()/3);
-            units_t attack_radius_damage = ceil((double)attacker->getPower()/2);
-            for(units_t i=0 ; i < height ; i++){
-                for(units_t j=0 ; j < width ; j++){
+            units_t area_radius = ceil((double)attacker->getAttackRange()/3);
+            units_t area_damage = ceil((double)attacker->getPower()/2);
+            for(units_t i=destination.row-2 ; i <= destination.row+2 ; i++){
+                for(units_t j=destination.col-2 ; j <= destination.col+2 ; j++){
                     GridPoint damaged_area = getGrid(i,j);
-                    if(distance(damaged_area, dst_coordinates)<=attack_radius){
+                    if(distance(damaged_area, destination)<=area_radius){
                         SharedPtr effected_target = characterInCell(damaged_area);
-                        if (effected_target != nullptr && attacker->isTeamMember(effected_target.get())) {
-                            effected_target->doDamage(attack_radius_damage);
+                        if (effected_target != nullptr || attacker->isTeamMember(effected_target.get())) {
+                            effected_target->doDamage(area_damage);
                         }
                     }
                 }
@@ -112,27 +112,31 @@ namespace mtm{
         }
     }
 
-    void Game::attack(const GridPoint &src_coordinates, const GridPoint &dst_coordinates) {
-        if(!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)){
+    void Game::attack(const GridPoint &attacker_location, const GridPoint &destination) {
+        SharedPtr attacker = characterInCell(attacker_location);
+        SharedPtr target = characterInCell(destination);
+        if(!isValidLocation(attacker_location) || !isValidLocation(destination)){
             //TODO: throw invalid coordinates
         }
-        SharedPtr attacker = characterInCell(src_coordinates);
-        SharedPtr target = characterInCell(dst_coordinates);
-        if(!attacker->isInAttackRange(dst_coordinates)){
+        if(!attacker->isInAttackRange(destination)){
             //TODO: throw attack out of range exception
+        }
+        if(attacker->isTeamMember(target.get())){
+            if(attacker->getType() == MEDIC) {
+                target->doDamage(-attacker->getPower());
+                return;
+            }
+            // TODO: throw Illegal attack exception
         }
         if(attacker->getAmmoCount() < attacker->getAmmoCost()){
             // TODO: throw OutOfAmmo exception
         }
-        if(attacker->isTeamMember(target.get()) && attacker->getType()!= MEDIC){
-            // TODO: throw Illegal attack exception
-        }
-        attacker->attack(target.get(), dst_coordinates);
+        attacker->attack(target.get(), destination);
         target->doDamage(attacker->getPower());
-        soldierAreaAttack(attacker.get(), dst_coordinates);
+        soldierAreaAttack(attacker.get(), destination);
     }
 
-
-
-
 }
+
+
+

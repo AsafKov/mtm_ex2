@@ -10,12 +10,16 @@ namespace mtm {
         return character->team == this->team;
     }
 
-    void Character::doDamage(units_t damage){
-        this->health-=damage;
+    CharacterType Character::getType() const{
+        return type;
     }
 
-    bool Character::isDead() const {
-        return health <= 0;
+    units_t Character::getPower() const{
+        return power;
+    }
+
+    units_t Character::getAmmoCost() const {
+        return AMMO_COST;
     }
 
     units_t Character::getAmmoCount() const{
@@ -26,31 +30,24 @@ namespace mtm {
         return attack_range;
     }
 
-    units_t Character::getPower() const{
-        return power;
+    void Character::doDamage(units_t damage){
+        this->health-=damage;
     }
 
-    units_t Character::getAmmoCost() const {
-        return mtm::Character::AMMO_COST;
-    }
-
-    units_t Character::getTargetAmmoCost(const Character* target) const {
-        return target->AMMO_COST;
-    }
-
-    units_t Character::distanceFromCurrentLocation(const GridPoint& point) const {
-        return GridPoint::distance(this->location, point);
-    }
-
-    void Character::setLocation(const GridPoint& location) {
-        this->location = location;
+    bool Character::isDead() const {
+        return health <= 0;
     }
 
     GridPoint Character::getLocation() const {
         return location;
     }
 
-    CharacterType Character::getType() const{
-        return type;
+    void Character::setLocation(const GridPoint& location) {
+        this->location = location;
     }
+
+    units_t Character::distanceFromCurrentLocation(const GridPoint& point) const {
+        return GridPoint::distance(this->location, point);
+    }
+
 }

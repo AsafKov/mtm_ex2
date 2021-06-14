@@ -29,15 +29,17 @@ namespace mtm{
         Game &operator=(const Game &game);
         ~Game();
 
-        void addCharacter(const GridPoint& coordinates, const SharedPtr &character);
-        void move(const GridPoint& src_coordinates, const GridPoint& dst_coordinates);
-        void attack(const GridPoint& src_coordinates, const GridPoint& dst_coordinates);
+
         SharedPtr &characterInCell(const GridPoint &coordinates);
         static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
                                        unit_t power);
-        void Game::soldierAreaAttack(Character* attacker, const GridPoint &dst_coordinates);
         GridPoint getGrid(int x, int y) const;
         units_t distance(const GridPoint& point1, const GridPoint& point2) const;
+        bool isValidLocation(const GridPoint location) const;
+        void addCharacter(const GridPoint &coordinates,  const SharedPtr& character);
+        void move(const GridPoint &src_location, const GridPoint &dst_location);
+        void soldierAreaAttack(Character* attacker, const GridPoint &destination);
+        void attack(const GridPoint &attacker_location, const GridPoint &destination);
     };
 }
 
