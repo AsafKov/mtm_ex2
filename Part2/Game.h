@@ -36,6 +36,9 @@ namespace mtm{
         SharedPtr &characterInCell(const GridPoint &coordinates);
         static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
                                        unit_t power);
+        void soldierAreaAttack(Character* attacker, const GridPoint &dst_coordinates);
+        GridPoint getGrid(int x, int y) const;
+        units_t distance(const GridPoint& point1, const GridPoint& point2) const;
     };
 }
 #endif //MTM_EX2_GAME_H
