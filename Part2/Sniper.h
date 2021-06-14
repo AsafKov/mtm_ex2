@@ -15,7 +15,7 @@ namespace mtm {
         void reload() override;
         Character *clone() const override;
         bool isInAttackRange(GridPoint dst_coordinates) const override;
-        void attack(Character* target,const GridPoint& destination);
+        void attack(Character* target,const GridPoint& destination) override;
         bool isDoubleDamage();
     };
 }

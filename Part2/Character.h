@@ -2,6 +2,7 @@
 #define CHARACTER
 #include "Auxiliaries.h"
 #include <vector>
+#include "Exceptions.h"
 
 namespace mtm {
 
@@ -24,11 +25,12 @@ namespace mtm {
         GridPoint location;
 
     public:
-        ~Character() = default;
+        virtual ~Character() = default;
+        virtual Character *clone() const = 0;
         virtual void reload() = 0;
         virtual bool isDestinationInRange(GridPoint dst_coordinates) const = 0;
         virtual bool isInAttackRange(GridPoint dst_coordinates) const = 0;
-        virtual void attack(Character* target, const GridPoint& destination) =0;
+        virtual void attack(Character* target, const GridPoint& destination) = 0;
         Team getTeam() const;
         bool isTeamMember(Character* character) const;
         CharacterType getType() const;

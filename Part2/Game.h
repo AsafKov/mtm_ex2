@@ -29,17 +29,16 @@ namespace mtm{
         ~Game();
 
 
-        SharedPtr &characterInCell(const GridPoint &coordinates);
+        Character *characterInCell(const GridPoint &coordinates);
         static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
                                        unit_t power);
-        GridPoint getGrid(int x, int y) const;
-        units_t distance(const GridPoint& point1, const GridPoint& point2) const;
-        bool isValidLocation(const GridPoint location) const;
+        static units_t distance(const GridPoint& point1, const GridPoint& point2) ;
         void addCharacter(const GridPoint &coordinates,  const SharedPtr& character);
         void move(const GridPoint &src_location, const GridPoint &dst_location);
         void soldierAreaAttack(Character* attacker, const GridPoint &destination);
         void attack(const GridPoint &attacker_location, const GridPoint &destination);
-    };
+        void reload(const GridPoint &coordinates);
+        };
 }
 
 #endif //MTM_EX2_GAME_H

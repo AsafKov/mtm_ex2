@@ -30,7 +30,7 @@ namespace mtm {
         }
     }
 
-    units_t Game::distance(const GridPoint& point1, const GridPoint& point2) const {
+    units_t Game::distance(const GridPoint& point1, const GridPoint& point2) {
         return GridPoint::distance(point1, point2);
     }
 
@@ -75,7 +75,7 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        SharedPtr character = characterInCell(src_coordinates);
+        Character* character = characterInCell(src_coordinates);
         if (character == nullptr) {
             throw CellEmpty();
         }
@@ -89,16 +89,17 @@ namespace mtm {
         character->setLocation(dst_coordinates);
     }
 
-    Game::SharedPtr &Game::characterInCell(const GridPoint &coordinates) {
+    Character* Game::characterInCell(const GridPoint &coordinates) {
+        int size = characters.size();
         auto it = characters.begin();
         while (it != characters.end()) {
-            if ((*it)->getLocation() == coordinates) {
-                return *it;
+            GridPoint point = (*it)->getLocation();
+            if (point == coordinates) {
+                return (*it).get();
             }
             it++;
         }
-        //TODO: Is valid return value null?
-        return *it;
+        return nullptr;
     }
 
     void Game::soldierAreaAttack(Character* attacker, const GridPoint &destination) {
@@ -107,10 +108,10 @@ namespace mtm {
             units_t area_damage = ceil((double)attacker->getPower()/2);
             for(units_t i=destination.row-2 ; i <= destination.row+2 ; i++){
                 for(units_t j=destination.col-2 ; j <= destination.col+2 ; j++){
-                    GridPoint damaged_area = getGrid(i,j);
+                    GridPoint damaged_area = GridPoint(i,j);
                     if(distance(damaged_area, destination)<=area_radius){
-                        SharedPtr effected_target = characterInCell(damaged_area);
-                        if (effected_target != nullptr || attacker->isTeamMember(effected_target.get())) {
+                        Character *effected_target = characterInCell(damaged_area);
+                        if (effected_target != nullptr || attacker->isTeamMember(effected_target)) {
                             effected_target->doDamage(area_damage);
                         }
                     }
@@ -121,15 +122,19 @@ namespace mtm {
 
 
     void Game::attack(const GridPoint &attacker_location, const GridPoint &destination) {
-        SharedPtr attacker = characterInCell(attacker_location);
-        SharedPtr target = characterInCell(destination);
+        Character * attacker = characterInCell(attacker_location);
+        int size = characters.size();
+        if(attacker == nullptr){
+            throw CellEmpty();
+        }
+        Character * target = characterInCell(destination);
         if(!isValidLocation(attacker_location) || !isValidLocation(destination)){
             throw IllegalCell();
         }
         if(!attacker->isInAttackRange(destination)){
             throw OutOfRange();
         }
-        if(attacker->isTeamMember(target.get())){
+        if(attacker->isTeamMember(target)){
             if(attacker->getType() == MEDIC) {
                 target->doDamage(-attacker->getPower());
                 return;
@@ -139,12 +144,19 @@ namespace mtm {
         if(attacker->getAmmoCount() < attacker->getAmmoCost()){
             throw OutOfAmmo();
         }
-        attacker->attack(target.get(), destination);
+        attacker->attack(target, destination);
         target->doDamage(attacker->getPower());
-        soldierAreaAttack(attacker.get(), destination);
+        soldierAreaAttack(attacker, destination);
     }
 
+    void Game::reload(const GridPoint &coordinates) {
+        if (!isValidLocation(coordinates)) {
+            throw IllegalCell();
+        }
+        Character * character = characterInCell(coordinates);
+        if (character == nullptr) {
+            throw CellEmpty();
+        }
+        character->reload();
+    }
 }
-
-
-

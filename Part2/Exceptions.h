@@ -7,8 +7,6 @@ using std::string;
 
 namespace mtm {
     class Exceptions : std::exception {
-    protected:
-        const char * what() const noexcept override;
     };
 
     class IllegalArgument : public Exceptions{

@@ -10,7 +10,7 @@ namespace mtm {
     }
 
     void Sniper::reload() {
-        this->ammo += mtm::Sniper::RELOAD_CREDIT;
+        this->ammo += RELOAD_CREDIT;
     }
 
     bool Sniper::isDoubleDamage() {
@@ -19,7 +19,7 @@ namespace mtm {
 
     void Sniper::attack(Character *target, const GridPoint &destination) {
         if (target == nullptr) {
-            //todo: invalid target
+            throw IllegalTarget();
         }
         if (isDoubleDamage()) {
             target->doDamage(this->power * 2);
@@ -28,7 +28,7 @@ namespace mtm {
     }
 
     bool Sniper::isDestinationInRange(GridPoint dst_coordinates) const {
-        return distanceFromCurrentLocation(dst_coordinates) <= mtm::Sniper::MOVED_RANGE;
+        return distanceFromCurrentLocation(dst_coordinates) <= MOVED_RANGE;
     }
 
     bool Sniper::isInAttackRange(GridPoint dst_coordinates) const {
