@@ -32,15 +32,6 @@ namespace mtm {
             target->doDamage(this->power * 2);
         }
         target->doDamage(this->power);
-//        doAttackedAreaDamage();
-    }
-
-    void Sniper::doAttackedAreaDamage(Character *potential_effected_target,
-                                      const GridPoint &potential_effected_destination) {
-        units_t distance = this->distanceFromCurrentLocation(potential_effected_destination);
-        if (distance < min_attacked_area_range || distance > max_attacked_area_range) {
-            potential_effected_target->doDamage(this->attacked_area_damage);
-        }
     }
 
     bool Sniper::isDestinationInRange(GridPoint dst_coordinates) const {
