@@ -2,15 +2,6 @@
 
 namespace mtm {
 
-    Character::Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, const GridPoint& location) {
-        this->team = team;
-        this->health = health;
-        this->ammo = ammo;
-        this->attack_range = attack_range;
-        this->power = power;
-        this->location = location;
-    }
-
     Team Character::getTeam() const {
         return team;
     }
@@ -32,7 +23,7 @@ namespace mtm {
     }
 
     units_t Character::getAmmoCost() const {
-        return this->AMMO_COST;
+        return mtm::Character::AMMO_COST;
     }
 
     units_t Character::getTargetAmmoCost(const Character* target) const {
@@ -43,10 +34,6 @@ namespace mtm {
         return GridPoint::distance(this->location, point);
     }
 
-    bool Character::isInAttackRange(const GridPoint& point) const {
-        return distanceFromCurrentLocation(point) <= this->attack_range;
-    }
-
     void Character::setLocation(const GridPoint& location) {
         this->location = location;
     }
@@ -55,4 +42,7 @@ namespace mtm {
         return location;
     }
 
+    CharacterType Character::getType() const{
+        return type;
+    }
 }
