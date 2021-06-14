@@ -29,6 +29,7 @@ namespace mtm {
         virtual bool isDestinationInRange(GridPoint dst_coordinates) const;
         virtual bool isInAttackRange(GridPoint dst_coordinates) const;
         virtual void attack();
+        virtual Character* clone() const;
         virtual units_t getAmmoCost() const;
         Team getTeam() const;
         bool  isTeamMember(Character* character) const;

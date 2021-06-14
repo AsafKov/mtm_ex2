@@ -15,7 +15,7 @@ namespace mtm {
 
     public:
         Medic(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type);
-        virtual Character *clone() const;
+        Character *clone() const override;
         void reload() override;
         bool isInAttackRange(GridPoint dst_coordinates) const override;
         units_t getAmmoCost() const override;

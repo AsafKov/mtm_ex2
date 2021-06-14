@@ -5,26 +5,40 @@ namespace mtm{
         characters = vector<SharedPtr>();
     }
 
-    Game::Game(const Game &game) {
-
+    Game::Game(const Game &game) : width(game.width), height(game.height){
+        characters = vector<SharedPtr>();
+        auto iterator = game.characters.begin();
+        while(iterator != game.characters.end()){
+            characters.push_back(SharedPtr((*iterator)->clone()));
+        }
     }
 
     Game &Game::operator=(const Game &game) {
+        if(this == &game){
+            return *this;
+        }
+        height = game.height;
+        width = game.width;
 
+        return *this;
     }
 
     Game::~Game() {
-
+        auto iterator = characters.begin();
+        while(iterator != characters.end()){
+            delete (*iterator).get();
+        }
     }
 
     void Game::addCharacter(const Game::GridPoint &coordinates,  const SharedPtr& character) {
         if (!isValidLocation(coordinates)) {
-            //TODO: throw InvalidCellException
+            throw Exceptions::IllegalCell();
         }
 
         if(characterInCell(coordinates) != nullptr){
-            //TODO: throw exception CellOccupied
+            throw Exceptions::CellOccupied();
         }
+        character->setLocation(coordinates);
         characters.push_back(character);
     }
 
@@ -34,11 +48,8 @@ namespace mtm{
 
     Game::SharedPtr Game::makeCharacter(CharacterType type, Team team, Game::unit_t health, Game::unit_t ammo,
                                         Game::unit_t range, Game::unit_t power) {
-        if(health == 0 || range == 0){
-            //TODO: throw illegal argument exception
-        }
-        if(power <0 || ammo < 0){
-            //TODO: throw illegal argument exception
+        if(health == 0 || range == 0 || ammo < 0 || power < 0){
+            throw Exceptions::IllegalArgument();
         }
         switch (type) {
             case SOLDIER: {
@@ -58,18 +69,18 @@ namespace mtm{
 
     void Game::move(const GridPoint &src_coordinates, const GridPoint &dst_coordinates) {
         if(!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)){
-            //TODO: throw invalid coordinates
+            throw Exceptions::IllegalCell();
         }
         SharedPtr character = characterInCell(src_coordinates);
         if(character == nullptr){
-            //TODO: throw empty cell exception
+            throw Exceptions::CellEmpty();
         }
         //TODO: can move 0 steps?
         if(characterInCell(dst_coordinates) != nullptr){
-            //TODO: cell occupied exception
+            throw Exceptions::CellOccupied();
         }
         if(!character->isDestinationInRange(dst_coordinates)){
-            //TODO: out of range exception
+            throw Exceptions::OutOfRange();
         }
         character->setLocation(dst_coordinates);
     }
@@ -88,24 +99,35 @@ namespace mtm{
 
     void Game::attack(const GridPoint &src_coordinates, const GridPoint &dst_coordinates) {
         if(!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)){
-            //TODO: throw invalid coordinates
+            throw Exceptions::IllegalCell();
         }
         SharedPtr character = characterInCell(src_coordinates);
         if(character == nullptr){
-            //TODO: throw empty cell exception
+            throw Exceptions::CellEmpty();
         }
 
         if(!character->isInAttackRange(dst_coordinates)){
-            //TODO: throw attack out of range exception
+            throw Exceptions::OutOfRange();
         }
 
         if(character->getAmmoCount() < character->getAmmoCost()){
-            // TODO: throw OutOfAmmo exception
+            throw Exceptions::OutOfAmmo();
         }
 
         if(characterInCell(dst_coordinates) == nullptr &&
             (character->getType() == MEDIC || character->getType() == SNIPER)){
-            // TODO: throw Illegal attack exception
+            throw Exceptions::IllegalTarget();
         }
+    }
+
+    void Game::reload(const GridPoint &coordinates) {
+        if(!isValidLocation(coordinates)){
+            throw Exceptions::IllegalCell();
+        }
+        SharedPtr character = characterInCell(coordinates);
+        if(character == nullptr){
+            throw Exceptions::CellEmpty();
+        }
+        character->reload();
     }
 }

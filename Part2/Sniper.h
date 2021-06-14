@@ -16,7 +16,7 @@ namespace mtm {
         Sniper(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type);
         bool isDestinationInRange(GridPoint dst_coordinates) const override;
         void reload() override;
-        virtual Character *clone() const;
+        Character *clone() const override;
         bool isInAttackRange(GridPoint dst_coordinates) const override;
         void attack(Character* target,const GridPoint& destination);
         void doAttackedAreaDamage(Character* potential_effected_target, const GridPoint& potential_effected_destination);
