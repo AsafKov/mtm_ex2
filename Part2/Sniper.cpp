@@ -25,7 +25,7 @@ namespace mtm {
     void Sniper::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
                         GridPoint dst) {
 
-        int target_key = calculateKey(dst.row, dst.col, boardWidth, boardWidth);
+        int target_key = calculateKey(dst.row, dst.col, boardWidth);
         if(characters.find(target_key) == characters.end()){
             throw IllegalTarget();
         }

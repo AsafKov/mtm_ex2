@@ -25,16 +25,16 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        int newKey = Character::calculateKey(coordinates.row, coordinates.col, width, height);;
+        int newKey = Character::calculateKey(coordinates.row, coordinates.col, width);;
         if (charactersMap.find(newKey) != charactersMap.end()) {
             throw CellOccupied();
         }
         character->setLocation(coordinates);
-        charactersMap[Character::calculateKey(coordinates.row, coordinates.col, width, height)] = character;
+        charactersMap[Character::calculateKey(coordinates.row, coordinates.col, width)] = character;
     }
 
     bool Game::isValidLocation(const Game::GridPoint point) const {
-        return (point.row >= 0 && point.row <= height) && (point.col >= 0 && point.col <= width);
+        return (point.row >= 0 && point.row < height) && (point.col >= 0 && point.col < width);
     }
 
     Game::SharedPtr Game::makeCharacter(CharacterType type, Team team, Game::unit_t health, Game::unit_t ammo,
@@ -62,8 +62,8 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        int src_key = Character::calculateKey(src_coordinates.row, src_coordinates.col, width, height);
-        int dst_key = Character::calculateKey(dst_coordinates.row, dst_coordinates.col, width, height);
+        int src_key = Character::calculateKey(src_coordinates.row, src_coordinates.col, width);
+        int dst_key = Character::calculateKey(dst_coordinates.row, dst_coordinates.col, width);
         if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
@@ -83,7 +83,7 @@ namespace mtm {
         if (!isValidLocation(attacker_location) || !isValidLocation(destination)) {
             throw IllegalCell();
         }
-        int src_key = Character::calculateKey(attacker_location.row, attacker_location.col, width, height);
+        int src_key = Character::calculateKey(attacker_location.row, attacker_location.col, width);
         if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
@@ -100,7 +100,7 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        int key = Character::calculateKey(coordinates.row, coordinates.col, width, height);
+        int key = Character::calculateKey(coordinates.row, coordinates.col, width);
         if (charactersMap.find(key) == charactersMap.end()) {
             throw CellEmpty();
         }
@@ -188,7 +188,7 @@ namespace mtm {
             *winningTeam = POWERLIFTERS;
             return true;
         }
-        if(powerlifters_present && !crossfitters_present){
+        if(!powerlifters_present && crossfitters_present){
             *winningTeam = CROSSFITTERS;
             return true;
         }

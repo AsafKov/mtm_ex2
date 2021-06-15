@@ -24,7 +24,7 @@ namespace mtm {
 
     void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
                          GridPoint dst){
-        int target_key = calculateKey(dst.row, dst.col, boardWidth, boardHeight);
+        int target_key = calculateKey(dst.row, dst.col, boardWidth);
         if(ammo < AMMO_COST){
             throw OutOfAmmo();
         }
@@ -46,7 +46,7 @@ namespace mtm {
         for (auto i = (units_t)fmax(dst.row - area_radius, 0); i <= fmin(dst.row + area_radius, boardHeight); i++){
             for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= fmin(dst.col + area_radius, boardWidth); j++){
                 GridPoint current_cell = GridPoint(i, j);
-                currentKey = calculateKey(current_cell.row, current_cell.col, boardWidth, boardHeight);
+                currentKey = calculateKey(current_cell.row, current_cell.col, boardWidth);
                 if (GridPoint::distance(current_cell, dst) > area_radius) {
                     continue;
                 }

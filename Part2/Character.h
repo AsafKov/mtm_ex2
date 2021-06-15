@@ -34,18 +34,12 @@ namespace mtm {
         virtual bool isInAttackRange(GridPoint dst_coordinates) const = 0;
         virtual void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
                             GridPoint dst) = 0;
-        static int calculateKey(int row, int col, int width, int height);
+        static int calculateKey(int row, int col, int width);
         Team getTeam() const;
-        bool isTeamMember(Character* character) const;
         CharacterType getType() const;
-        units_t getPower() const;
-        units_t getAmmoCost() const;
-        units_t getAmmoCount() const;
-        units_t getAttackRange() const;
         void applyDamage(units_t damage);
         bool isDead() const;
-        GridPoint getLocation() const;
-        void setLocation(const GridPoint& location);
+        void setLocation(const GridPoint& coordinates);
         units_t distanceFromCurrentLocation(const GridPoint& point) const;
     };
 
