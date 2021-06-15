@@ -36,7 +36,7 @@ namespace mtm {
 
         bool isValidLocation(GridPoint point) const;
 
-        int pointToKey(GridPoint point) const;
+        void copyCharacterMap(const unordered_map<int, SharedPtr> &characters);
 
     public:
         Game(int height, int width);

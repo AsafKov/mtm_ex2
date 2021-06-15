@@ -24,7 +24,7 @@ namespace mtm {
 
     void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
                          GridPoint dst){
-        int target_key = dst.row * boardWidth + dst.col;
+        int target_key = calculateKey(dst.row, dst.col, boardWidth, boardHeight);
         if(ammo < AMMO_COST){
             throw OutOfAmmo();
         }
@@ -43,11 +43,11 @@ namespace mtm {
         const units_t area_radius = ceil((double) attack_range / 3);
         const units_t splash_damage = ceil((double) power / 2);
         int currentKey;
-        for (auto i = (units_t)fmax(dst.row - area_radius, 0); i <= (dst.row + area_radius) && i < boardHeight; i++){
-            for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= (dst.col + area_radius) && j < boardWidth; j++){
+        for (auto i = (units_t)fmax(dst.row - area_radius, 0); i <= fmin(dst.row + area_radius, boardHeight); i++){
+            for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= fmin(dst.col + area_radius, boardWidth); j++){
                 GridPoint current_cell = GridPoint(i, j);
-                currentKey = current_cell.row*boardWidth + current_cell.col;
-                if (GridPoint::distance(current_cell, dst) >= area_radius) {
+                currentKey = calculateKey(current_cell.row, current_cell.col, boardWidth, boardHeight);
+                if (GridPoint::distance(current_cell, dst) > area_radius) {
                     continue;
                 }
                 if(characters.find(currentKey) == characters.end()){

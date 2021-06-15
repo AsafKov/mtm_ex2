@@ -22,7 +22,7 @@ namespace mtm {
 
     void Medic::attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
                        GridPoint dst){
-        int target_key = dst.row * boardWidth + dst.col;
+        int target_key = Character::calculateKey(dst.row, dst.col, boardWidth, boardHeight);
         if(dst == location || characters.find(target_key) == characters.end()){
             throw IllegalTarget();
         }

@@ -12,56 +12,56 @@ namespace mtm {
     class IllegalArgument : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: IllegalArgument";
+            return "A game related error has occurred: IllegalArgument";
         }
     };
 
     class IllegalCell : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: IllegalCell";
+            return "A game related error has occurred: IllegalCell";
         }
     };
 
     class CellEmpty : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: CellEmpty";
+            return "A game related error has occurred: CellEmpty";
         }
     };
 
     class MoveTooFar : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: MoveTooFar";
+            return "A game related error has occurred: MoveTooFar";
         }
     };
 
     class CellOccupied : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: CellOccupied";
+            return "A game related error has occurred: CellOccupied";
         }
     };
 
     class OutOfRange : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: OutOfRange";
+            return "A game related error has occurred: OutOfRange";
         }
     };
 
     class OutOfAmmo : public Exceptions{
         public:
         const char * what() const noexcept override{
-            return "A game related error occurred: OutOfAmmo";
+            return "A game related error has occurred: OutOfAmmo";
         }
     };
 
     class IllegalTarget : public Exceptions{
     public:
         const char * what() const noexcept override{
-            return "A game related error occurred: IllegalTarget";
+            return "A game related error has occurred: IllegalTarget";
         }
     };
 }

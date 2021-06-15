@@ -7,5 +7,5 @@ set(MTM_FLAGS_RELEASE "${MTM_FLAGS_DEBUG} -DNDEBUG")
 #Part 1
 #add_executable(mtm_ex2 SortedList/SortedList.h ExamSystem/ExamDetails.h ExamSystem/ExamDetails.cpp tests/main.cpp)
 #Part 2
-add_executable(mtm_ex2 Part2/Auxiliaries.cpp  Part2/Character.cpp Part2/gameTest.cpp
-            Part2/Medic.cpp  Part2/Sniper.cpp Part2/Soldier.cpp  Part2/Game.cpp Part2/Exceptions.cpp)
+add_executable(mtm_ex2 Part2/Auxiliaries.cpp  Part2/Character.cpp Part2/main_tests2.cpp
+            Part2/Medic.cpp  Part2/Sniper.cpp Part2/Soldier.cpp  Part2/Game.cpp Part2/main_tests2.cpp)

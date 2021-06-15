@@ -50,4 +50,11 @@ namespace mtm {
         return GridPoint::distance(this->location, point);
     }
 
+    int Character::calculateKey(int row, int col, int width, int height) {
+        int i = 1;
+        if(row < col){
+            i *= -1;
+        }
+        return (row * width + col) * i;
+    }
 }

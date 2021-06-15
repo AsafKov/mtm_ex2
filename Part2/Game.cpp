@@ -1,12 +1,10 @@
 #include "Game.h"
 
 namespace mtm {
-    Game::Game(int height, int width) : width(width), height(height) {
-
-    }
+    Game::Game(int height, int width) : width(width), height(height) {}
 
     Game::Game(const Game &game) : width(game.width), height(game.height) {
-
+        copyCharacterMap(game.charactersMap);
     }
 
     Game &Game::operator=(const Game &game) {
@@ -15,23 +13,24 @@ namespace mtm {
         }
         height = game.height;
         width = game.width;
+        copyCharacterMap(game.charactersMap);
         return *this;
     }
 
     Game::~Game() {
-
+        charactersMap.clear();
     }
 
     void Game::addCharacter(const Game::GridPoint &coordinates, const SharedPtr &character) {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        int newKey = pointToKey(coordinates);
+        int newKey = Character::calculateKey(coordinates.row, coordinates.col, width, height);;
         if (charactersMap.find(newKey) != charactersMap.end()) {
             throw CellOccupied();
         }
         character->setLocation(coordinates);
-        charactersMap[pointToKey(coordinates)] = character;
+        charactersMap[Character::calculateKey(coordinates.row, coordinates.col, width, height)] = character;
     }
 
     bool Game::isValidLocation(const Game::GridPoint point) const {
@@ -40,7 +39,7 @@ namespace mtm {
 
     Game::SharedPtr Game::makeCharacter(CharacterType type, Team team, Game::unit_t health, Game::unit_t ammo,
                                         Game::unit_t range, Game::unit_t power) {
-        if (health == 0 || range == 0 || ammo < 0 || power < 0) {
+        if (health == 0 || range < 0 || ammo < 0 || power < 0) {
             throw IllegalArgument();
         }
         switch (type) {
@@ -63,8 +62,8 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        int src_key = pointToKey(src_coordinates);
-        int dst_key = pointToKey(dst_coordinates);
+        int src_key = Character::calculateKey(src_coordinates.row, src_coordinates.col, width, height);
+        int dst_key = Character::calculateKey(dst_coordinates.row, dst_coordinates.col, width, height);
         if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
@@ -84,7 +83,7 @@ namespace mtm {
         if (!isValidLocation(attacker_location) || !isValidLocation(destination)) {
             throw IllegalCell();
         }
-        int src_key = pointToKey(attacker_location);
+        int src_key = Character::calculateKey(attacker_location.row, attacker_location.col, width, height);
         if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
@@ -101,16 +100,12 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        int key = pointToKey(coordinates);
+        int key = Character::calculateKey(coordinates.row, coordinates.col, width, height);
         if (charactersMap.find(key) == charactersMap.end()) {
             throw CellEmpty();
         }
         SharedPtr character = charactersMap.find(key)->second;
         character->reload();
-    }
-
-    int Game::pointToKey(GridPoint point) const {
-        return point.row * width + point.col;
     }
 
     void Game::removeDeadCharacters() {
@@ -132,9 +127,14 @@ namespace mtm {
         string output = string();
         int key;
         Game::SharedPtr character;
+        int i;
         for (int row = 0; row < game.height; row++) {
             for (int col = 0; col < game.width; col++) {
-                key = row * game.width + col;
+                i = 1;
+                if(row < col){
+                    i *= -1;
+                }
+                key = (row * game.width + col)*i;
                 if (game.charactersMap.find(key) == game.charactersMap.end()) {
                     output += EMPTY_CELL;
                 } else {
@@ -193,5 +193,12 @@ namespace mtm {
             return true;
         }
         return false;
+    }
+
+    void Game::copyCharacterMap(const unordered_map<int, Game::SharedPtr> &characters) {
+        charactersMap.clear();
+        for (const auto &item : characters){
+            charactersMap[item.first] = SharedPtr(item.second->clone());
+        }
     }
 }
