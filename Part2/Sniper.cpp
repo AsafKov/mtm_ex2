@@ -22,8 +22,8 @@ namespace mtm {
                && distanceFromCurrentLocation(dst_coordinates) >= ceil((double)attack_range/2);
     }
 
-    void Sniper::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, GridPoint dst,
-                        Exceptions *&exception) {
+    void Sniper::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
+                        GridPoint dst) {
         int target_key = dst.row * boardWidth + dst.col;
         if(characters.find(target_key) == characters.end()){
             throw IllegalTarget();
@@ -33,8 +33,7 @@ namespace mtm {
             throw IllegalTarget();
         }
         if(ammo < AMMO_COST){
-            exception = new OutOfAmmo();
-            return;
+            throw OutOfAmmo();
         }
         if(++attacks_counter % 3 == 0){
             target->applyDamage(power*2);

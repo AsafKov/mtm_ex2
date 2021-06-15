@@ -88,13 +88,12 @@ namespace mtm {
         if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
-        Exceptions *exception = nullptr;
         SharedPtr attacker = charactersMap.find(src_key)->second;
 
         if (!attacker->isInAttackRange(destination)) {
             throw OutOfRange();
         }
-        attacker->attack(charactersMap, width, destination, exception);
+        attacker->attack(charactersMap, width, height, destination);
         removeDeadCharacters();
     }
 

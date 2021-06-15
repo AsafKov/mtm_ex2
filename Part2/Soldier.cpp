@@ -22,8 +22,8 @@ namespace mtm {
         return distanceFromCurrentLocation(dst_coordinates) <= attack_range;
     }
 
-    void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, GridPoint dst,
-                         Exceptions *&exception){
+    void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
+                         GridPoint dst){
         int target_key = dst.row * boardWidth + dst.col;
         if(ammo < AMMO_COST){
             throw OutOfAmmo();
@@ -35,16 +35,16 @@ namespace mtm {
                 target->applyDamage(power);
             }
         }
-        applySplashDamage(characters, boardWidth, dst);
+        applySplashDamage(characters, boardWidth, boardHeight, dst);
     }
 
-    void Soldier::applySplashDamage(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth,
+    void Soldier::applySplashDamage(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
                                     const GridPoint &dst) {
         const units_t area_radius = ceil((double) attack_range / 3);
         const units_t splash_damage = ceil((double) power / 2);
         int currentKey;
-        for (units_t i = dst.row - 2; i <= dst.row + 2; i++) {
-            for (units_t j = dst.col - 2; j <= dst.col + 2; j++) {
+        for (auto i = (units_t)fmax(dst.row - area_radius, 0); i <= (dst.row + area_radius) && i < boardHeight; i++){
+            for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= (dst.col + area_radius) && j < boardWidth; j++){
                 GridPoint current_cell = GridPoint(i, j);
                 currentKey = current_cell.row*boardWidth + current_cell.col;
                 if (GridPoint::distance(current_cell, dst) >= area_radius) {

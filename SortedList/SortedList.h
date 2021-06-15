@@ -191,6 +191,7 @@ SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
 
 template<class T>
 void SortedList<T>::copyListContent(const SortedList<T> &from) {
+    //TODO: handle memory allocation failure
     clearList();
     if(from.listLength == 0){
         return;

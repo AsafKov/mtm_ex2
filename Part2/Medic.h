@@ -15,8 +15,8 @@ namespace mtm {
         void reload() override;
         bool isInAttackRange(GridPoint dst_coordinates) const override;
         bool isDestinationInRange(GridPoint dst_coordinates) const override;
-        void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth,
-                            GridPoint dst, Exceptions *&exception) override;
+        void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
+                            GridPoint dst) override;
     };
 }
 

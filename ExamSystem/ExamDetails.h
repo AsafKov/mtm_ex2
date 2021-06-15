@@ -8,6 +8,8 @@ using std::cout;
 using std::endl;
 #define MTM_EX2_EXAMDETAILS_H
 
+const static char* MATAM_ZOOM_LINK = "https://tinyurl.com/59hzps6m";
+
 class ExamDetails {
 private:
     const static int MONTH_LENGTH = 30;

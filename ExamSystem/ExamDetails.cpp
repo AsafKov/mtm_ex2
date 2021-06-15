@@ -55,7 +55,7 @@ ExamDetails::ExamDetails(const ExamDetails &exam) {
 
 ExamDetails ExamDetails::makeMatamExam() {
     return ExamDetails(MATAM_COURSE_NUMBER, MATAM_EXAM_MONTH, MATAM_EXAM_DAY, MATAM_EXAM_HOUR,
-                       MATAM_EXAM_DURATION, "https://tinyurl.com/59hzps6m");
+                       MATAM_EXAM_DURATION, MATAM_ZOOM_LINK);
 }
 
 ostream& operator<<(ostream &os, const ExamDetails &exam) {

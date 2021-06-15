@@ -20,8 +20,8 @@ namespace mtm {
         return distanceFromCurrentLocation(dst_coordinates) <= attack_range;
     }
 
-    void Medic::attack(const unordered_map<int, SharedPtr> &characters, int boardWidth,
-                       GridPoint dst, Exceptions *&exception){
+    void Medic::attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
+                       GridPoint dst){
         int target_key = dst.row * boardWidth + dst.col;
         if(dst == location || characters.find(target_key) == characters.end()){
             throw IllegalTarget();

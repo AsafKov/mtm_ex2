@@ -32,8 +32,8 @@ namespace mtm {
         virtual void reload() = 0;
         virtual bool isDestinationInRange(GridPoint dst_coordinates) const = 0;
         virtual bool isInAttackRange(GridPoint dst_coordinates) const = 0;
-        virtual void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth,
-                            GridPoint dst, Exceptions *&exception) = 0;
+        virtual void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
+                            GridPoint dst) = 0;
         Team getTeam() const;
         bool isTeamMember(Character* character) const;
         CharacterType getType() const;
