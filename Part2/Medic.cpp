@@ -12,19 +12,30 @@ namespace mtm {
         this->ammo += mtm::Medic::RELOAD_CREDIT;
     }
 
-    void Medic::attack(Character* target,const GridPoint& destination) {
-        if (target == nullptr || this->location == target->getLocation()){
-            throw IllegalTarget();
-        }
-        this->ammo -= getAmmoCost();
-    }
-
     bool Medic::isDestinationInRange(GridPoint dst_coordinates) const {
         return distanceFromCurrentLocation(dst_coordinates) <= MOVE_RANGE;
     }
 
     bool Medic::isInAttackRange(GridPoint dst_coordinates) const {
         return distanceFromCurrentLocation(dst_coordinates) <= attack_range;
+    }
+
+    void Medic::attack(const unordered_map<int, SharedPtr> &characters, int boardWidth,
+                       GridPoint dst, Exceptions *&exception){
+        int target_key = dst.row * boardWidth + dst.col;
+        if(dst == location || characters.find(target_key) == characters.end()){
+            throw IllegalTarget();
+        }
+        SharedPtr target = characters.find(target_key)->second;
+        if(team == target->getTeam()){
+            target->applyDamage(-power);
+        } else {
+            if(ammo < AMMO_COST){
+                throw OutOfAmmo();
+            }
+            target->applyDamage(power);
+            ammo -= AMMO_COST;
+        }
     }
 }
 

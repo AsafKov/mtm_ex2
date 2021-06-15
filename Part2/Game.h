@@ -7,8 +7,18 @@
 #include "Exceptions.h"
 #include <memory>
 #include <vector>
-using std::vector;
+#include <unordered_map>
+using std::unordered_map;
 using std::shared_ptr;
+
+#define EMPTY_CELL " "
+#define SOLDIER_CELL_PL "S"
+#define SOLDIER_CELL_CF "s"
+#define MEDIC_CELL "M"
+#define MEDIC_CELL_PL "M"
+#define MEDIC_CELL_CF "m"
+#define SNIPER_CELL_PL "N"
+#define SNIPER_CELL_CF "n"
 
 namespace mtm{
     class Game {
@@ -19,26 +29,27 @@ namespace mtm{
 
         unit_t height;
         unit_t width;
-        vector<SharedPtr> characters;
+        unordered_map<int, SharedPtr> charactersMap;
 
         bool isValidLocation(GridPoint point) const;
+        int pointToKey(GridPoint point) const;
     public:
         Game(int height, int width);
         Game(const Game &game);
         Game &operator=(const Game &game);
         ~Game();
+        friend std::ostream& operator<<(std::ostream &os, const Game &game);
 
-
-        Character *characterInCell(const GridPoint &coordinates);
         static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
                                        unit_t power);
-        static units_t distance(const GridPoint& point1, const GridPoint& point2) ;
         void addCharacter(const GridPoint &coordinates,  const SharedPtr& character);
         void move(const GridPoint &src_location, const GridPoint &dst_location);
-        void soldierAreaAttack(Character* attacker, const GridPoint &destination);
         void attack(const GridPoint &attacker_location, const GridPoint &destination);
         void reload(const GridPoint &coordinates);
+        void removeDeadCharacters();
+        bool isOver(Team *winningTeam = NULL);
         };
+    std::ostream& operator<<(std::ostream &os, const Game &game);
 }
 
 #endif //MTM_EX2_GAME_H

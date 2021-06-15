@@ -2,15 +2,11 @@
 
 namespace mtm {
     Game::Game(int height, int width) : width(width), height(height) {
-        characters = vector<SharedPtr>();
+
     }
 
     Game::Game(const Game &game) : width(game.width), height(game.height) {
-        characters = vector<SharedPtr>();
-        auto iterator = game.characters.begin();
-        while (iterator != game.characters.end()) {
-            characters.push_back(SharedPtr((*iterator)->clone()));
-        }
+
     }
 
     Game &Game::operator=(const Game &game) {
@@ -19,31 +15,23 @@ namespace mtm {
         }
         height = game.height;
         width = game.width;
-
         return *this;
     }
 
     Game::~Game() {
-        auto iterator = characters.begin();
-        while (iterator != characters.end()) {
-            delete (*iterator).get();
-        }
-    }
 
-    units_t Game::distance(const GridPoint& point1, const GridPoint& point2) {
-        return GridPoint::distance(point1, point2);
     }
 
     void Game::addCharacter(const Game::GridPoint &coordinates, const SharedPtr &character) {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-
-        if (characterInCell(coordinates) != nullptr) {
+        int newKey = pointToKey(coordinates);
+        if (charactersMap.find(newKey) != charactersMap.end()) {
             throw CellOccupied();
         }
         character->setLocation(coordinates);
-        characters.push_back(character);
+        charactersMap[pointToKey(coordinates)] = character;
     }
 
     bool Game::isValidLocation(const Game::GridPoint point) const {
@@ -75,88 +63,136 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        Character* character = characterInCell(src_coordinates);
-        if (character == nullptr) {
+        int src_key = pointToKey(src_coordinates);
+        int dst_key = pointToKey(dst_coordinates);
+        if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
-        //TODO: can move 0 steps?
-        if (characterInCell(dst_coordinates) != nullptr) {
+        SharedPtr character = charactersMap[src_key];
+        if (charactersMap.find(dst_key) != charactersMap.end()) {
             throw CellOccupied();
         }
         if (!character->isDestinationInRange(dst_coordinates)) {
-            throw OutOfRange();
+            throw MoveTooFar();
         }
+        charactersMap.erase(src_key);
+        charactersMap[dst_key] = character;
         character->setLocation(dst_coordinates);
     }
 
-    Character* Game::characterInCell(const GridPoint &coordinates) {
-        int size = characters.size();
-        auto it = characters.begin();
-        while (it != characters.end()) {
-            GridPoint point = (*it)->getLocation();
-            if (point == coordinates) {
-                return (*it).get();
-            }
-            it++;
-        }
-        return nullptr;
-    }
-
-    void Game::soldierAreaAttack(Character* attacker, const GridPoint &destination) {
-        if(attacker->getType() == SOLDIER){
-            units_t area_radius = ceil((double)attacker->getAttackRange()/3);
-            units_t area_damage = ceil((double)attacker->getPower()/2);
-            for(units_t i=destination.row-2 ; i <= destination.row+2 ; i++){
-                for(units_t j=destination.col-2 ; j <= destination.col+2 ; j++){
-                    GridPoint damaged_area = GridPoint(i,j);
-                    if(distance(damaged_area, destination)<=area_radius){
-                        Character *effected_target = characterInCell(damaged_area);
-                        if (effected_target != nullptr || attacker->isTeamMember(effected_target)) {
-                            effected_target->doDamage(area_damage);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
     void Game::attack(const GridPoint &attacker_location, const GridPoint &destination) {
-        Character * attacker = characterInCell(attacker_location);
-        int size = characters.size();
-        if(attacker == nullptr){
-            throw CellEmpty();
-        }
-        Character * target = characterInCell(destination);
-        if(!isValidLocation(attacker_location) || !isValidLocation(destination)){
+        if (!isValidLocation(attacker_location) || !isValidLocation(destination)) {
             throw IllegalCell();
         }
-        if(!attacker->isInAttackRange(destination)){
+        int src_key = pointToKey(attacker_location);
+        if (charactersMap.find(src_key) == charactersMap.end()) {
+            throw CellEmpty();
+        }
+        Exceptions *exception = nullptr;
+        SharedPtr attacker = charactersMap.find(src_key)->second;
+
+        if (!attacker->isInAttackRange(destination)) {
             throw OutOfRange();
         }
-        if(attacker->isTeamMember(target)){
-            if(attacker->getType() == MEDIC) {
-                target->doDamage(-attacker->getPower());
-                return;
-            }
-            throw IllegalTarget();
-        }
-        if(attacker->getAmmoCount() < attacker->getAmmoCost()){
-            throw OutOfAmmo();
-        }
-        attacker->attack(target, destination);
-        target->doDamage(attacker->getPower());
-        soldierAreaAttack(attacker, destination);
+        attacker->attack(charactersMap, width, destination, exception);
+        removeDeadCharacters();
     }
 
     void Game::reload(const GridPoint &coordinates) {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        Character * character = characterInCell(coordinates);
-        if (character == nullptr) {
+        int key = pointToKey(coordinates);
+        if (charactersMap.find(key) == charactersMap.end()) {
             throw CellEmpty();
         }
+        SharedPtr character = charactersMap.find(key)->second;
         character->reload();
+    }
+
+    int Game::pointToKey(GridPoint point) const {
+        return point.row * width + point.col;
+    }
+
+    void Game::removeDeadCharacters() {
+        using std::vector;
+        vector<int> toRemove = vector<int>();
+        SharedPtr character;
+        for (const auto &item : charactersMap) {
+            character = item.second;
+            if (character->isDead()) {
+                toRemove.push_back(item.first);
+            }
+        }
+        for (auto iterator = toRemove.begin(); iterator != toRemove.end(); iterator++) {
+            charactersMap.erase(*iterator);
+        }
+    }
+
+    std::ostream &operator<<(std::ostream &os, const Game &game) {
+        string output = string();
+        int key;
+        Game::SharedPtr character;
+        for (int row = 0; row < game.height; row++) {
+            for (int col = 0; col < game.width; col++) {
+                key = row * game.width + col;
+                if (game.charactersMap.find(key) == game.charactersMap.end()) {
+                    output += EMPTY_CELL;
+                } else {
+                    character = game.charactersMap.find(key)->second;
+                    if (character->getType() == SOLDIER) {
+                        if (character->getTeam() == POWERLIFTERS) {
+                            output += SOLDIER_CELL_PL;
+                        } else {
+                            output += SOLDIER_CELL_CF;
+                        }
+                    }
+                    if (character->getType() == MEDIC) {
+                        if (character->getTeam() == POWERLIFTERS) {
+                            output += MEDIC_CELL_PL;
+                        } else {
+                            output += MEDIC_CELL_CF;
+                        }
+                    }
+                    if (character->getType() == SNIPER) {
+                        if (character->getTeam() == POWERLIFTERS) {
+                            output += SNIPER_CELL_PL;
+                        } else {
+                            output += SNIPER_CELL_CF;
+                        }
+                    }
+                }
+            }
+        }
+        return printGameBoard(os, output.c_str(), output.c_str() + sizeof(char) * game.width * game.height, game.width);
+    }
+
+    bool Game::isOver(Team *winningTeam) {
+        bool powerlifters_present = false;
+        bool crossfitters_present = false;
+        SharedPtr current_character;
+        for (const auto &item : charactersMap) {
+            current_character = item.second;
+            if(current_character->getTeam() == POWERLIFTERS){
+                powerlifters_present = true;
+            } else {
+                crossfitters_present = true;
+            }
+        }
+        if(winningTeam == nullptr){
+            return !crossfitters_present || !powerlifters_present;
+        }
+        if(powerlifters_present && crossfitters_present){
+            return false;
+        }
+        if(powerlifters_present && !crossfitters_present){
+            *winningTeam = POWERLIFTERS;
+            return true;
+        }
+        if(powerlifters_present && !crossfitters_present){
+            *winningTeam = CROSSFITTERS;
+            return true;
+        }
+        return false;
     }
 }

@@ -13,20 +13,6 @@ namespace mtm {
         this->ammo += RELOAD_CREDIT;
     }
 
-    bool Sniper::isDoubleDamage() {
-        return (this->attacks_counter++) % 3 == 0;
-    }
-
-    void Sniper::attack(Character *target, const GridPoint &destination) {
-        if (target == nullptr) {
-            throw IllegalTarget();
-        }
-        if (isDoubleDamage()) {
-            target->doDamage(this->power * 2);
-        }
-        this->ammo -= getAmmoCost();
-    }
-
     bool Sniper::isDestinationInRange(GridPoint dst_coordinates) const {
         return distanceFromCurrentLocation(dst_coordinates) <= MOVED_RANGE;
     }
@@ -34,6 +20,28 @@ namespace mtm {
     bool Sniper::isInAttackRange(GridPoint dst_coordinates) const {
         return distanceFromCurrentLocation(dst_coordinates) <= attack_range
                && distanceFromCurrentLocation(dst_coordinates) >= ceil((double)attack_range/2);
+    }
+
+    void Sniper::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, GridPoint dst,
+                        Exceptions *&exception) {
+        int target_key = dst.row * boardWidth + dst.col;
+        if(characters.find(target_key) == characters.end()){
+            throw IllegalTarget();
+        }
+        SharedPtr target = characters.find(target_key)->second;
+        if(team == target->getTeam()){
+            throw IllegalTarget();
+        }
+        if(ammo < AMMO_COST){
+            exception = new OutOfAmmo();
+            return;
+        }
+        if(++attacks_counter % 3 == 0){
+            target->applyDamage(power*2);
+        } else {
+            target->applyDamage(power);
+        }
+        ammo -= AMMO_COST;
     }
 }
 

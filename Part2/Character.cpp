@@ -30,7 +30,7 @@ namespace mtm {
         return attack_range;
     }
 
-    void Character::doDamage(units_t damage){
+    void Character::applyDamage(units_t damage){
         this->health-=damage;
     }
 
