@@ -36,7 +36,7 @@ namespace mtm {
 
         bool isValidLocation(GridPoint point) const;
 
-        void copyCharacterMap(const unordered_map<int, SharedPtr> &characters);
+        bool copyCharacterMap(const unordered_map<int, SharedPtr> &characters);
 
     public:
         Game(int height, int width);

@@ -11,9 +11,11 @@ namespace mtm {
         if (this == &game) {
             return *this;
         }
-        height = game.height;
-        width = game.width;
-        copyCharacterMap(game.charactersMap);
+        bool is_copy_successful = copyCharacterMap(game.charactersMap);
+        if(is_copy_successful){
+            height = game.height;
+            width = game.width;
+        }
         return *this;
     }
 
@@ -195,10 +197,17 @@ namespace mtm {
         return false;
     }
 
-    void Game::copyCharacterMap(const unordered_map<int, Game::SharedPtr> &characters) {
-        charactersMap.clear();
+    bool Game::copyCharacterMap(const unordered_map<int, Game::SharedPtr> &characters) {
+        unordered_map<int, SharedPtr> temp_map;
         for (const auto &item : characters){
-            charactersMap[item.first] = SharedPtr(item.second->clone());
+            try{
+                temp_map[item.first] = SharedPtr(item.second->clone());
+            } catch(std::bad_alloc &exception){
+                return false;
+            }
         }
+        charactersMap.clear();
+        charactersMap = unordered_map<int, SharedPtr>(temp_map);
+        return true;
     }
 }

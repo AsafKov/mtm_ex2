@@ -1,0 +1,309 @@
+startttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+past 0.1 test
+past 0.2 test
+past 0.3 test
+past 0.4 test
+past 1 test
+past 2 test
+past 3 test
+past 4 test
+past 5 test
+past 6 test
+past 7 test
+past 8 test
+past 9 test
+past 10 test
+past 11 test
+past 11.1 test
+past 11.2 test
+past 11.3 test
+past 11.4 test
+past 12 test
+past 13 test
+past 14 test
+past 15 test
+past 15.1 test
+past 15.2 test
+past 15.3 test
+past 15.4 test
+reached after line 105
+past 16.5 test
+past 17 test
+past 17.1 test
+past 17.2 test
+past 18 test
+past 19 test
+past 20 test
+------example 1------
+past 21 test
+past 21.1 test
+past 21.2 test
+past 21.3 test
+past 21.4 test
+*****************
+| | | | | | | | |
+| |M| | |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+past 21.5 test
+past 21.6 test
+*****************
+| | | | | | | | |
+| | |M| |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+past 21 test
+A game related error has occurred: IllegalTarget
+past 22 test
+A game related error has occurred: OutOfRange
+past 23 test
+*****************
+| | | | | | | | |
+| | |M| |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: CellEmpty
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | |s| | | | | |
+| | | | | | | | |
+| | | | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: OutOfRange
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | |s| |m| | | |
+| | | | | | | | |
+*****************
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: CellEmpty
+A game related error has occurred: OutOfAmmo
+A game related error has occurred: IllegalTarget
+isOver: 0
+is powerlifters the winning team?: 0
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | | | |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: CellEmpty
+isOver: 1
+is powerlifters the winning team?: 1
+------example 2------
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+|S| | | | | |m| |n| |
+| | | | | | |m| | | |
+*********************
+A game related error has occurred: OutOfRange
+A game related error has occurred: MoveTooFar
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+|S| | | | | |m| |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | |m| |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+|S| | | | | |m| |n| |
+| | | | | | |m| | | |
+*********************
+A game related error has occurred: OutOfAmmo
+A game related error has occurred: CellEmpty
+A game related error has occurred: IllegalCell
+A game related error has occurred: IllegalCell
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | |m| |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | | | |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | | | |n| |
+| | | | | | |m| | | |
+*********************
+A game related error has occurred: IllegalTarget
+A game related error has occurred: OutOfAmmo
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | | | |n| |
+| | | | | | | | | | |
+*********************
+------example 3------
+***********
+|N|S|S|N|M|
+| | | | | |
+| | | | | |
+| | | | | |
+|m|n|s|s|n|
+***********
+A game related error has occurred: IllegalCell
+A game related error has occurred: OutOfRange
+A game related error has occurred: IllegalTarget
+***********
+|N| |S|N|M|
+| | | | | |
+| |S| | | |
+| | | |s| |
+|m|n|s| |n|
+***********
+A game related error has occurred: OutOfRange
+A game related error has occurred: OutOfAmmo
+A game related error has occurred: CellEmpty
+***********
+|N| |S|N| |
+| | | | | |
+|S| |M| | |
+| | | | | |
+| | |s| | |
+***********
+***********
+|N| |S|N| |
+| | | | | |
+|S| |M| | |
+| | | | | |
+|s| | | | |
+***********
+***********
+|N| |S|N| |
+| | | | | |
+|S| |M| | |
+| | | | | |
+| | | | | |
+***********
+winning team is: 0
+*********
+|S|M|N|S|
+| | | | |
+| | | | |
+|S|N|M|S|
+*********A game related error has occurred: IllegalCell
+A game related error has occurred: IllegalCell
+A game related error has occurred: IllegalTarget
+A game related error has occurred: CellEmpty
+*********
+|S| | |S|
+| | | | |
+| | | | |
+|s|n| | |
+******************
+|S| | |S|
+| | | | |
+| | | | |
+|s|n| | |
+*********A game related error has occurred: OutOfAmmo
+*********
+|S| | |S|
+| | | | |
+| | | | |
+|s|n| | |
+******************
+|S| | |S|
+| | | | |
+| | | | |
+| |n| | |
+******************
+| | | |S|
+| | | | |
+| | | | |
+| |n| | |
+*********A game related error has occurred: OutOfRange
+*********
+| | | |S|
+| | | | |
+| | | | |
+| |n| | |
+******************
+| |S| | |
+| | | | |
+| | | | |
+| |n| | |
+******************
+| | | | |
+| | | | |
+| | | | |
+| |n| | |
+*********Winning team is: 1
