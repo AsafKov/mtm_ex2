@@ -42,6 +42,7 @@ namespace mtm {
         Game(const Game &game);
         Game &operator=(const Game &game);
         friend std::ostream &operator<<(std::ostream &os, const Game &game);
+        static void cellInOutput(string output, Team team, char CELL_PL , char CELL_CF);
         static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
                                        unit_t power);
         void addCharacter(const GridPoint &coordinates, const SharedPtr &character);

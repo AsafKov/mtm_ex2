@@ -123,42 +123,33 @@ namespace mtm {
         }
     }
 
+    void Game::cellInOutput(string output, Team team, char CELL_PL , char CELL_CF) {
+        if (team == POWERLIFTERS) {
+            output += CELL_PL;
+        } else {
+            output += CELL_CF;
+        }
+    }
+
     std::ostream &operator<<(std::ostream &os, const Game &game) {
         string output = string();
-        int key;
         Game::SharedPtr character;
-        int i;
+        int key;
         for (int row = 0; row < game.height; row++) {
             for (int col = 0; col < game.width; col++) {
-                i = 1;
-                if (row < col) {
-                    i *= -1;
-                }
-                key = (row * game.width + col) * i;
+                character->calculateKey(row, col, game.width);
                 if (game.charactersMap.find(key) == game.charactersMap.end()) {
                     output += EMPTY_CELL;
                 } else {
                     character = game.charactersMap.find(key)->second;
                     if (character->getType() == SOLDIER) {
-                        if (character->getTeam() == POWERLIFTERS) {
-                            output += SOLDIER_CELL_PL;
-                        } else {
-                            output += SOLDIER_CELL_CF;
-                        }
+                        Game::cellInOutput(output, character->getTeam(),SOLDIER_CELL_PL,SOLDIER_CELL_CF);
                     }
                     if (character->getType() == MEDIC) {
-                        if (character->getTeam() == POWERLIFTERS) {
-                            output += MEDIC_CELL_PL;
-                        } else {
-                            output += MEDIC_CELL_CF;
-                        }
+                        Game::cellInOutput(output, character->getTeam(),MEDIC_CELL_PL,MEDIC_CELL_CF);
                     }
                     if (character->getType() == SNIPER) {
-                        if (character->getTeam() == POWERLIFTERS) {
-                            output += SNIPER_CELL_PL;
-                        } else {
-                            output += SNIPER_CELL_CF;
-                        }
+                        Game::cellInOutput(output, character->getTeam(),SNIPER_CELL_PL,SNIPER_CELL_CF);
                     }
                 }
             }
