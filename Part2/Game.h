@@ -29,9 +29,8 @@ namespace mtm {
         typedef mtm::GridPoint GridPoint;
         typedef std::shared_ptr<Character> SharedPtr;
 
-
-        unit_t height;
         unit_t width;
+        unit_t height;
         unordered_map<int, SharedPtr> charactersMap;
 
         bool isValidLocation(GridPoint point) const;

@@ -12,11 +12,6 @@ namespace mtm {
     class Character {
     protected:
         static const units_t AMMO_COST = 1;
-        Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type)
-            : location(-1,-1), team(team), type(type), health(health), ammo(ammo), attack_range(attack_range),
-                power(power){}
-        Character(const Character &character) = default;
-
         Team team;
         CharacterType type;
         units_t health;
@@ -24,7 +19,10 @@ namespace mtm {
         units_t attack_range;
         units_t power;
         GridPoint location;
-
+        Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type)
+                : team(team), type(type), health(health), ammo(ammo), attack_range(attack_range),
+                  power(power), location(-1,-1){}
+        Character(const Character &character) = default;
         typedef shared_ptr<Character> SharedPtr;
     public:
         virtual ~Character() = default;
