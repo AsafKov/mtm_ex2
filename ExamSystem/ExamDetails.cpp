@@ -54,6 +54,7 @@ ExamDetails::ExamDetails(const ExamDetails &exam) {
 }
 
 ExamDetails ExamDetails::makeMatamExam() {
+    const static char* MATAM_ZOOM_LINK = "https://tinyurl.com/59hzps6m";
     return ExamDetails(MATAM_COURSE_NUMBER, MATAM_EXAM_MONTH, MATAM_EXAM_DAY, MATAM_EXAM_HOUR,
                        MATAM_EXAM_DURATION, MATAM_ZOOM_LINK);
 }
