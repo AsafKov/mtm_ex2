@@ -137,12 +137,11 @@ namespace mtm {
         }
     }
 
-    void Game::cellInOutput(string output, Team team, char CELL_PL , char CELL_CF) {
+    char cellInOutput(Team team, char CELL_PL , char CELL_CF) {
         if (team == POWERLIFTERS) {
-            output += CELL_PL;
-        } else {
-            output += CELL_CF;
+            return CELL_PL;
         }
+        return CELL_CF;
     }
 
     std::ostream &operator<<(std::ostream &os, const Game &game) {
@@ -156,13 +155,13 @@ namespace mtm {
                 } else {
                     character = game.charactersMap.find(key)->second;
                     if (character->getType() == SOLDIER) {
-                        Game::cellInOutput(output, character->getTeam(),SOLDIER_CELL_PL,SOLDIER_CELL_CF);
+                        output += cellInOutput(character->getTeam(), SOLDIER_CELL_PL, SOLDIER_CELL_CF);
                     }
                     if (character->getType() == MEDIC) {
-                        Game::cellInOutput(output, character->getTeam(),MEDIC_CELL_PL,MEDIC_CELL_CF);
+                        output += cellInOutput(character->getTeam(),MEDIC_CELL_PL,MEDIC_CELL_CF);
                     }
                     if (character->getType() == SNIPER) {
-                        Game::cellInOutput(output, character->getTeam(),SNIPER_CELL_PL,SNIPER_CELL_CF);
+                        output += cellInOutput(character->getTeam(),SNIPER_CELL_PL,SNIPER_CELL_CF);
                     }
                 }
             }
