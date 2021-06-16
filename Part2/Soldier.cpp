@@ -22,9 +22,9 @@ namespace mtm {
         return distanceFromCurrentLocation(dst_coordinates) <= attack_range;
     }
 
-    void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
-                         GridPoint dst){
-        int target_key = calculateKey(dst.row, dst.col, boardWidth);
+    void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,
+                         GridPoint dst_coordinates){
+        int target_key = calculateKey(dst_coordinates.row, dst_coordinates.col, width);
         if(ammo < AMMO_COST){
             throw OutOfAmmo();
         }
@@ -32,21 +32,21 @@ namespace mtm {
         if(characters.find(target_key) != characters.end()){
             SharedPtr target = characters.find(target_key)->second;
             if(team != target->getTeam()){
-                target->applyDamage(power);
+                target->dealDamage(power);
             }
         }
-        applySplashDamage(characters, boardWidth, boardHeight, dst);
+        dealSplashDamage(characters, width, height, dst_coordinates);
     }
 
-    void Soldier::applySplashDamage(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
+    void Soldier::dealSplashDamage(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,
                                     const GridPoint &dst) {
         const units_t area_radius = ceil((double) attack_range / 3);
         const units_t splash_damage = ceil((double) power / 2);
         int currentKey;
-        for (auto i = (units_t)fmax(dst.row - area_radius, 0); i <= fmin(dst.row + area_radius, boardHeight); i++){
-            for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= fmin(dst.col + area_radius, boardWidth); j++){
+        for (auto i = (units_t)fmax(dst.row - area_radius, 0); i <= fmin(dst.row + area_radius, height); i++){
+            for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= fmin(dst.col + area_radius, width); j++){
                 GridPoint current_cell = GridPoint(i, j);
-                currentKey = calculateKey(current_cell.row, current_cell.col, boardWidth);
+                currentKey = calculateKey(current_cell.row, current_cell.col, width);
                 if (GridPoint::distance(current_cell, dst) > area_radius) {
                     continue;
                 }
@@ -55,7 +55,7 @@ namespace mtm {
                 }
                 SharedPtr affected_target = characters.find(currentKey)->second;
                 if (team != affected_target.get()->getTeam()) {
-                    affected_target->applyDamage(splash_damage);
+                    affected_target->dealDamage(splash_damage);
                 }
             }
         }

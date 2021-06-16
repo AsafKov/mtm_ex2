@@ -79,20 +79,20 @@ namespace mtm {
         character->setLocation(dst_coordinates);
     }
 
-    void Game::attack(const GridPoint &attacker_location, const GridPoint &destination) {
-        if (!isValidLocation(attacker_location) || !isValidLocation(destination)) {
+    void Game::attack(const GridPoint &attacker_coordinates, const GridPoint &dst_coordinates) {
+        if (!isValidLocation(attacker_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        int src_key = Character::calculateKey(attacker_location.row, attacker_location.col, width);
+        int src_key = Character::calculateKey(attacker_coordinates.row, attacker_coordinates.col, width);
         if (charactersMap.find(src_key) == charactersMap.end()) {
             throw CellEmpty();
         }
         SharedPtr attacker = charactersMap.find(src_key)->second;
 
-        if (!attacker->isInAttackRange(destination)) {
+        if (!attacker->isInAttackRange(dst_coordinates)) {
             throw OutOfRange();
         }
-        attacker->attack(charactersMap, width, height, destination);
+        attacker->attack(charactersMap, width, height, dst_coordinates);
         removeDeadCharacters();
     }
 

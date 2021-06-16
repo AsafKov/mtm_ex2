@@ -2,6 +2,14 @@
 
 namespace mtm {
 
+    int Character::calculateKey(int row, int col, int width) {
+        int i = 1;
+        if(row < col){
+            i *= -1;
+        }
+        return (row * width + col) * i;
+    }
+
     Team Character::getTeam() const {
         return team;
     }
@@ -10,7 +18,7 @@ namespace mtm {
         return type;
     }
 
-    void Character::applyDamage(units_t damage){
+    void Character::dealDamage(units_t damage){
         this->health-=damage;
     }
 
@@ -26,11 +34,4 @@ namespace mtm {
         return GridPoint::distance(this->location, point);
     }
 
-    int Character::calculateKey(int row, int col, int width) {
-        int i = 1;
-        if(row < col){
-            i *= -1;
-        }
-        return (row * width + col) * i;
-    }
 }
