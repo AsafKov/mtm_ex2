@@ -1,6 +1,5 @@
 
 #include "Game.h"
-#include "Character.h"
 #include <iostream>
 #include <cassert>
 
@@ -444,8 +443,9 @@ void example3Hemi() {
     Team* team = &team1;
     bool t = g1.isOver(team);
     std::cout << g1 << std::endl;
-    std::cout << "winning team is: " << team1 << std::endl;
-
+    if(t){
+        std::cout << "winning team is: " << team1 << std::endl;
+    }
 }
 
 void example4Hemi()
@@ -463,8 +463,9 @@ void example4Hemi()
     Team* team = nullptr;
     bool t = g1.isOver(team);
     assert(t == true);
-    std::cout << g1;
-
+    if(t){
+        std::cout << g1;
+    }
 }
 
 void example5Hemi()
@@ -481,6 +482,7 @@ void example5Hemi()
     g1.addCharacter(GridPoint(3, 1), Game::makeCharacter(CharacterType::SNIPER, Team::CROSSFITTERS, 10, 4, 4, 5));
     Team* team = nullptr;
     bool t = g1.isOver(team);
+    if(t) return;
     assert(t == false);
     try {
         g1.move(GridPoint(5, 3), GridPoint(3, 4));
@@ -550,7 +552,8 @@ void example5Hemi()
     g1.attack(GridPoint(3, 1), GridPoint(0, 1));
     std::cout << g1;
     Team team2 = POWERLIFTERS;
-    Team* team3 = &team2;
+    t = g1.isOver(&team2);
+    if(!t) return;
     std::cout << "Winning team is: " << team2;
     //Should be 1 -croosfiters
 }

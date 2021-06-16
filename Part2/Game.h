@@ -61,7 +61,7 @@ namespace mtm {
 
         void removeDeadCharacters();
 
-        bool isOver(Team *winningTeam = NULL);
+        bool isOver(Team *winningTeam = nullptr);
     };
 
     std::ostream &operator<<(std::ostream &os, const Game &game);
