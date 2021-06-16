@@ -11,6 +11,7 @@ private:
 
         explicit ListNode(T value) : nextNode(nullptr), value(value) {};
         ListNode() = default;
+        ~ListNode() = default;
     };
     ListNode *head = nullptr;
     int listLength;
