@@ -460,7 +460,7 @@ void example4Hemi()
     g1.addCharacter(GridPoint(3, 0), Game::makeCharacter(CharacterType::SOLDIER, Team::POWERLIFTERS, 5, 3, 4, 10));
     g1.addCharacter(GridPoint(3, 2), Game::makeCharacter(CharacterType::MEDIC, Team::POWERLIFTERS, 10, 5, 5, 8));
     g1.addCharacter(GridPoint(3, 1), Game::makeCharacter(CharacterType::SNIPER, Team::POWERLIFTERS, 10, 4, 5, 5));
-    Team* team = NULL;
+    Team* team = nullptr;
     bool t = g1.isOver(team);
     assert(t == true);
     std::cout << g1;
@@ -479,7 +479,7 @@ void example5Hemi()
     g1.addCharacter(GridPoint(3, 0), Game::makeCharacter(CharacterType::SOLDIER, Team::CROSSFITTERS, 7, 3, 4, 10));
     g1.addCharacter(GridPoint(3, 2), Game::makeCharacter(CharacterType::MEDIC, Team::CROSSFITTERS, 10, 5, 5, 8));
     g1.addCharacter(GridPoint(3, 1), Game::makeCharacter(CharacterType::SNIPER, Team::CROSSFITTERS, 10, 4, 4, 5));
-    Team* team = NULL;
+    Team* team = nullptr;
     bool t = g1.isOver(team);
     assert(t == false);
     try {
@@ -551,7 +551,6 @@ void example5Hemi()
     std::cout << g1;
     Team team2 = POWERLIFTERS;
     Team* team3 = &team2;
-    bool t1 = g1.isOver(team3);
     std::cout << "Winning team is: " << team2;
     //Should be 1 -croosfiters
 }
