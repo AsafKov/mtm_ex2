@@ -21,19 +21,19 @@ namespace mtm {
         charactersMap.clear();
     }
 
-    shared_ptr<Character> Game::getCharacter(const GridPoint& coordinates, units_t width) {
+    shared_ptr<Character> Game::getCharacterMap(const GridPoint& coordinates, units_t width) {
         return charactersMap.find((int)Character::calculateKey(coordinates, width))->second;
     }
 
-    void Game::eraseCharacter(const GridPoint& coordinates, units_t width) {
+    void Game::eraseCharacterMap(const GridPoint& coordinates, units_t width) {
         charactersMap.erase((int)Character::calculateKey(coordinates, width));
     }
 
-    void Game::reassignCharacter(const GridPoint& coordinates, units_t width, const SharedPtr &character) {
+    void Game::addCharacterMap(const GridPoint& coordinates, units_t width, const SharedPtr &character) {
         charactersMap[(int)Character::calculateKey(coordinates, width)] = character;
     }
 
-    bool Game::foundCharacters(const GridPoint& coordinates, units_t width) {
+    bool Game::foundCharactersMap(const GridPoint& coordinates, units_t width) {
         return charactersMap.find((int)Character::calculateKey(coordinates, width)) != charactersMap.end();
     }
 
@@ -41,11 +41,11 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        if (foundCharacters(coordinates, width)) {
+        if (foundCharactersMap(coordinates, width)) {
             throw CellOccupied();
         }
         character->setLocation(coordinates);
-        reassignCharacter(coordinates,width,character);
+        addCharacterMap(coordinates,width,character);
     }
 
     bool Game::isValidLocation(const Game::GridPoint point) const {
@@ -77,18 +77,18 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        if (!foundCharacters(src_coordinates, width)) {
+        if (!foundCharactersMap(src_coordinates, width)) {
             throw CellEmpty();
         }
-        SharedPtr character = getCharacter(src_coordinates, width);
-        if (foundCharacters(dst_coordinates, width)) {
+        SharedPtr character = getCharacterMap(src_coordinates, width);
+        if (foundCharactersMap(dst_coordinates, width)) {
             throw CellOccupied();
         }
         if (!character->isDestinationInRange(dst_coordinates)) {
             throw MoveTooFar();
         }
-        eraseCharacter(src_coordinates,width);
-        reassignCharacter(dst_coordinates,width,character);
+        eraseCharacterMap(src_coordinates,width);
+        addCharacterMap(dst_coordinates,width,character);
         character->setLocation(dst_coordinates);
     }
 
@@ -96,10 +96,10 @@ namespace mtm {
         if (!isValidLocation(attacker_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        if (!foundCharacters(attacker_coordinates, width)) {
+        if (!foundCharactersMap(attacker_coordinates, width)) {
             throw CellEmpty();
         }
-        SharedPtr attacker = getCharacter(attacker_coordinates, width);
+        SharedPtr attacker = getCharacterMap(attacker_coordinates, width);
 
         if (!attacker->isInAttackRange(dst_coordinates)) {
             throw OutOfRange();
@@ -115,10 +115,10 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        if (!foundCharacters(coordinates, width)) {
+        if (!foundCharactersMap(coordinates, width)) {
             throw CellEmpty();
         }
-        SharedPtr character = getCharacter(coordinates, width);
+        SharedPtr character = getCharacterMap(coordinates, width);
         character->reload();
     }
 

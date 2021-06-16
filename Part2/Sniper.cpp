@@ -13,19 +13,19 @@ namespace mtm {
         this->ammo += RELOAD_CREDIT;
     }
 
-    bool Sniper::isDestinationInRange(GridPoint dst_coordinates) const {
-        return distanceFromCurrentLocation(dst_coordinates) <= MOVED_RANGE;
+    bool Sniper::isDestinationInRange(GridPoint coordinates) const {
+        return distanceFromCurrentLocation(coordinates) <= MOVED_RANGE;
     }
 
-    bool Sniper::isInAttackRange(GridPoint dst_coordinates) const {
-        return distanceFromCurrentLocation(dst_coordinates) <= attack_range
-               && distanceFromCurrentLocation(dst_coordinates) >= ceil((double)attack_range/2);
+    bool Sniper::isInAttackRange(GridPoint coordinates) const {
+        return distanceFromCurrentLocation(coordinates) <= attack_range
+               && distanceFromCurrentLocation(coordinates) >= ceil((double)attack_range/2);
     }
 
     void Sniper::attack(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,
-                        GridPoint dst_coordinates) {
+                        GridPoint coordinates) {
 
-        int target_key = calculateKey(dst_coordinates, width);
+        int target_key = calculateKey(coordinates, width);
         if(characters.find(target_key) == characters.end()){
             throw IllegalTarget();
         }

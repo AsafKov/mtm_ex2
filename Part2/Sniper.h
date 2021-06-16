@@ -11,12 +11,12 @@ namespace mtm {
 
     public:
         Sniper(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type);
-        bool isDestinationInRange(GridPoint dst_coordinates) const override;
+        bool isDestinationInRange(GridPoint coordinates) const override;
         void reload() override;
         Character *clone() const override;
-        bool isInAttackRange(GridPoint dst_coordinates) const override;
+        bool isInAttackRange(GridPoint coordinates) const override;
         void attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
-                    GridPoint dst_coordinates) override;
+                    GridPoint coordinates) override;
     };
 }
 

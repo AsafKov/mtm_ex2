@@ -11,20 +11,20 @@ namespace mtm {
         this->ammo += mtm::Soldier::RELOAD_CREDIT;
     }
 
-    bool Soldier::isDestinationInRange(GridPoint dst_coordinates) const{
-        return distanceFromCurrentLocation(dst_coordinates) <= mtm::Soldier::MOVE_RANGE;
+    bool Soldier::isDestinationInRange(GridPoint coordinates) const{
+        return distanceFromCurrentLocation(coordinates) <= mtm::Soldier::MOVE_RANGE;
     }
 
-    bool Soldier::isInAttackRange(GridPoint dst_coordinates) const {
-        if(dst_coordinates.row != location.row && dst_coordinates.col != location.col){
+    bool Soldier::isInAttackRange(GridPoint coordinates) const {
+        if(coordinates.row != location.row && coordinates.col != location.col){
             throw IllegalTarget();
         }
-        return distanceFromCurrentLocation(dst_coordinates) <= attack_range;
+        return distanceFromCurrentLocation(coordinates) <= attack_range;
     }
 
     void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,
-                         GridPoint dst_coordinates){
-        int target_key = calculateKey(dst_coordinates, width);
+                         GridPoint coordinates){
+        int target_key = calculateKey(coordinates, width);
         updateAmmo();
         if(characters.find(target_key) != characters.end()){
             SharedPtr target = characters.find(target_key)->second;
@@ -32,7 +32,7 @@ namespace mtm {
                 target->dealDamage(power);
             }
         }
-        dealSplashDamage(characters, width, height, dst_coordinates);
+        dealSplashDamage(characters, width, height, coordinates);
     }
 
     void Soldier::dealSplashDamage(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,
