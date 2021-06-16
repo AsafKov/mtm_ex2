@@ -81,6 +81,9 @@ namespace mtm {
             throw CellEmpty();
         }
         SharedPtr character = getCharacterMap(src_coordinates, width);
+        if (src_coordinates == dst_coordinates) {
+            return;
+        }
         if (foundCharactersMap(dst_coordinates, width)) {
             throw CellOccupied();
         }
