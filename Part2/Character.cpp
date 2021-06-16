@@ -2,6 +2,16 @@
 
 namespace mtm {
 
+    int Character::calculateKey(const GridPoint& coordinates, int width) {
+        int row = coordinates.row;
+        int col = coordinates.col;
+        int i = 1;
+        if(row < col){
+            i *= -1;
+        }
+        return (row * width + col) * i;
+    }
+
     Team Character::getTeam() const {
         return team;
     }
@@ -10,12 +20,20 @@ namespace mtm {
         return type;
     }
 
-    void Character::applyDamage(units_t damage){
+    void Character::dealDamage(units_t damage){
         this->health-=damage;
     }
 
     bool Character::isDead() const {
         return health <= 0;
+    }
+
+    bool Character::isOutOfAmmo() const {
+        return (ammo < AMMO_COST);
+    }
+
+    void Character::updateAmmo() {
+        ammo -= AMMO_COST;
     }
 
     void Character::setLocation(const GridPoint& coordinates) {
@@ -26,11 +44,4 @@ namespace mtm {
         return GridPoint::distance(this->location, point);
     }
 
-    int Character::calculateKey(int row, int col, int width) {
-        int i = 1;
-        if(row < col){
-            i *= -1;
-        }
-        return (row * width + col) * i;
-    }
 }

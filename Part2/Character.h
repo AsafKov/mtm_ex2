@@ -11,6 +11,11 @@ namespace mtm {
 
     class Character {
     protected:
+        Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type)
+                : team(team), type(type), health(health), ammo(ammo), attack_range(attack_range),
+                  power(power), location(-1,-1){}
+        Character(const Character &character) = default;
+
         static const units_t AMMO_COST = 1;
         Team team;
         CharacterType type;
@@ -19,10 +24,7 @@ namespace mtm {
         units_t attack_range;
         units_t power;
         GridPoint location;
-        Character(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type)
-                : team(team), type(type), health(health), ammo(ammo), attack_range(attack_range),
-                  power(power), location(-1,-1){}
-        Character(const Character &character) = default;
+
         typedef shared_ptr<Character> SharedPtr;
     public:
         virtual ~Character() = default;
@@ -32,11 +34,13 @@ namespace mtm {
         virtual bool isInAttackRange(GridPoint dst_coordinates) const = 0;
         virtual void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
                             GridPoint dst) = 0;
-        static int calculateKey(int row, int col, int width);
+        static int calculateKey(const GridPoint& coordinates, int width);
         Team getTeam() const;
         CharacterType getType() const;
-        void applyDamage(units_t damage);
+        void dealDamage(units_t damage);
         bool isDead() const;
+        bool isOutOfAmmo() const;
+        void updateAmmo();
         void setLocation(const GridPoint& coordinates);
         units_t distanceFromCurrentLocation(const GridPoint& point) const;
     };
