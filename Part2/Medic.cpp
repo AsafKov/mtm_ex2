@@ -22,7 +22,7 @@ namespace mtm {
 
     void Medic::attack(const unordered_map<int, SharedPtr> &characters, int width, int height,
                        GridPoint dst_coordinates){
-        int target_key = Character::calculateKey(dst_coordinates.row, dst_coordinates.col, width);
+        int target_key = Character::calculateKey(dst_coordinates, width);
         if(dst_coordinates == location || characters.find(target_key) == characters.end()){
             throw IllegalTarget();
         }
@@ -30,11 +30,11 @@ namespace mtm {
         if(team == target->getTeam()){
             target->dealDamage(-power);
         } else {
-            if(ammo < AMMO_COST){
+            if(isOutOfAmmo()){
                 throw OutOfAmmo();
             }
             target->dealDamage(power);
-            ammo -= AMMO_COST;
+            updateAmmo();
         }
     }
 }

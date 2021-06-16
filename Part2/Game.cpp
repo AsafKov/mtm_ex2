@@ -21,16 +21,31 @@ namespace mtm {
         charactersMap.clear();
     }
 
+    shared_ptr<Character> Game::getCharacter(const GridPoint& coordinates, units_t width) {
+        return charactersMap.find((int)Character::calculateKey(coordinates, width))->second;
+    }
+
+    void Game::eraseCharacter(const GridPoint& coordinates, units_t width) {
+        charactersMap.erase((int)Character::calculateKey(coordinates, width));
+    }
+
+    void Game::reassignCharacter(const GridPoint& coordinates, units_t width, const SharedPtr &character) {
+        charactersMap[(int)Character::calculateKey(coordinates, width)] = character;
+    }
+
+    bool Game::foundCharacters(const GridPoint& coordinates, units_t width) {
+        return charactersMap.find((int)Character::calculateKey(coordinates, width)) != charactersMap.end();
+    }
+
     void Game::addCharacter(const Game::GridPoint &coordinates, const SharedPtr &character) {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        int newKey = Character::calculateKey(coordinates.row, coordinates.col, width);;
-        if (charactersMap.find(newKey) != charactersMap.end()) {
+        if (foundCharacters(coordinates, width)) {
             throw CellOccupied();
         }
         character->setLocation(coordinates);
-        charactersMap[Character::calculateKey(coordinates.row, coordinates.col, width)] = character;
+        reassignCharacter(coordinates,width,character);
     }
 
     bool Game::isValidLocation(const Game::GridPoint point) const {
@@ -62,20 +77,18 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        int src_key = Character::calculateKey(src_coordinates.row, src_coordinates.col, width);
-        int dst_key = Character::calculateKey(dst_coordinates.row, dst_coordinates.col, width);
-        if (charactersMap.find(src_key) == charactersMap.end()) {
+        if (!foundCharacters(src_coordinates, width)) {
             throw CellEmpty();
         }
-        SharedPtr character = charactersMap[src_key];
-        if (charactersMap.find(dst_key) != charactersMap.end()) {
+        SharedPtr character = getCharacter(src_coordinates, width);
+        if (foundCharacters(dst_coordinates, width)) {
             throw CellOccupied();
         }
         if (!character->isDestinationInRange(dst_coordinates)) {
             throw MoveTooFar();
         }
-        charactersMap.erase(src_key);
-        charactersMap[dst_key] = character;
+        eraseCharacter(src_coordinates,width);
+        reassignCharacter(dst_coordinates,width,character);
         character->setLocation(dst_coordinates);
     }
 
@@ -83,14 +96,16 @@ namespace mtm {
         if (!isValidLocation(attacker_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        int src_key = Character::calculateKey(attacker_coordinates.row, attacker_coordinates.col, width);
-        if (charactersMap.find(src_key) == charactersMap.end()) {
+        if (!foundCharacters(attacker_coordinates, width)) {
             throw CellEmpty();
         }
-        SharedPtr attacker = charactersMap.find(src_key)->second;
+        SharedPtr attacker = getCharacter(attacker_coordinates, width);
 
         if (!attacker->isInAttackRange(dst_coordinates)) {
             throw OutOfRange();
+        }
+        if(attacker->isOutOfAmmo() && attacker->getType()!=MEDIC){
+            throw OutOfAmmo();
         }
         attacker->attack(charactersMap, width, height, dst_coordinates);
         removeDeadCharacters();
@@ -100,11 +115,10 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        int key = Character::calculateKey(coordinates.row, coordinates.col, width);
-        if (charactersMap.find(key) == charactersMap.end()) {
+        if (!foundCharacters(coordinates, width)) {
             throw CellEmpty();
         }
-        SharedPtr character = charactersMap.find(key)->second;
+        SharedPtr character = getCharacter(coordinates, width);
         character->reload();
     }
 
@@ -134,10 +148,9 @@ namespace mtm {
     std::ostream &operator<<(std::ostream &os, const Game &game) {
         string output = string();
         Game::SharedPtr character;
-        int key;
         for (int row = 0; row < game.height; row++) {
             for (int col = 0; col < game.width; col++) {
-                character->calculateKey(row, col, game.width);
+                int key = character->calculateKey(GridPoint(row, col), game.width);
                 if (game.charactersMap.find(key) == game.charactersMap.end()) {
                     output += EMPTY_CELL;
                 } else {
@@ -158,28 +171,28 @@ namespace mtm {
     }
 
     bool Game::isOver(Team *winningTeam) {
-        bool powerlifters_present = false;
-        bool crossfitters_present = false;
+        bool is_powerlifters_winners = false;
+        bool is_crossfitters_winners = false;
         SharedPtr current_character;
         for (const auto &item : charactersMap) {
             current_character = item.second;
             if (current_character->getTeam() == POWERLIFTERS) {
-                powerlifters_present = true;
+                is_powerlifters_winners = true;
             } else {
-                crossfitters_present = true;
+                is_crossfitters_winners = true;
             }
         }
         if (winningTeam == nullptr) {
-            return !crossfitters_present || !powerlifters_present;
+            return !is_crossfitters_winners || !is_powerlifters_winners;
         }
-        if (powerlifters_present && crossfitters_present) {
+        if (is_powerlifters_winners && is_crossfitters_winners) {
             return false;
         }
-        if (powerlifters_present && !crossfitters_present) {
+        if (is_powerlifters_winners && !is_crossfitters_winners) {
             *winningTeam = POWERLIFTERS;
             return true;
         }
-        if (!powerlifters_present && crossfitters_present) {
+        if (!is_powerlifters_winners && is_crossfitters_winners) {
             *winningTeam = CROSSFITTERS;
             return true;
         }

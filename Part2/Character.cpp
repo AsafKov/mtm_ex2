@@ -2,7 +2,9 @@
 
 namespace mtm {
 
-    int Character::calculateKey(int row, int col, int width) {
+    int Character::calculateKey(const GridPoint& coordinates, int width) {
+        int row = coordinates.row;
+        int col = coordinates.col;
         int i = 1;
         if(row < col){
             i *= -1;
@@ -24,6 +26,14 @@ namespace mtm {
 
     bool Character::isDead() const {
         return health <= 0;
+    }
+
+    bool Character::isOutOfAmmo() const {
+        return (ammo < AMMO_COST);
+    }
+
+    void Character::updateAmmo() {
+        ammo -= AMMO_COST;
     }
 
     void Character::setLocation(const GridPoint& coordinates) {

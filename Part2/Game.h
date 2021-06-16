@@ -51,6 +51,11 @@ namespace mtm {
         void reload(const GridPoint &coordinates);
         void removeDeadCharacters();
         bool isOver(Team *winningTeam = nullptr);
+
+        shared_ptr<Character> getCharacter(const GridPoint& dst_coordinates, units_t width);
+        bool foundCharacters(const GridPoint& dst_coordinates, units_t width);
+        void eraseCharacter(const GridPoint& coordinates, units_t width);
+        void reassignCharacter(const GridPoint& coordinates, units_t width, const SharedPtr &character);
     };
 
     std::ostream &operator<<(std::ostream &os, const Game &game);
