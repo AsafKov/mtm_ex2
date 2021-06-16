@@ -15,13 +15,13 @@ using std::shared_ptr;
 
 
 namespace mtm {
-    const static char *EMPTY_CELL = " ";
-    const static char *SOLDIER_CELL_PL = "S";
-    const static char *SOLDIER_CELL_CF = "s";
-    const static char *MEDIC_CELL_PL = "M";
-    const static char *MEDIC_CELL_CF = "m";
-    const static char *SNIPER_CELL_PL = "N";
-    const static char *SNIPER_CELL_CF = "n";
+    const static char EMPTY_CELL = ' ';
+    const static char SOLDIER_CELL_PL = 'S';
+    const static char SOLDIER_CELL_CF = 's';
+    const static char MEDIC_CELL_PL = 'M';
+    const static char MEDIC_CELL_CF = 'm';
+    const static char SNIPER_CELL_PL = 'N';
+    const static char SNIPER_CELL_CF = 'n';
 
     class Game {
         typedef int unit_t;
@@ -35,7 +35,7 @@ namespace mtm {
 
         bool isValidLocation(GridPoint point) const;
 
-        bool copyCharacterMap(const unordered_map<int, SharedPtr> &characters);
+        void copyCharacterMap(const unordered_map<int, SharedPtr> &characters);
 
     public:
         Game(int height, int width);

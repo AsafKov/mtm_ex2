@@ -11,11 +11,9 @@ namespace mtm {
         if (this == &game) {
             return *this;
         }
-        bool is_copy_successful = copyCharacterMap(game.charactersMap);
-        if(is_copy_successful){
-            height = game.height;
-            width = game.width;
-        }
+        copyCharacterMap(game.charactersMap);
+        height = game.height;
+        width = game.width;
         return *this;
     }
 
@@ -133,10 +131,10 @@ namespace mtm {
         for (int row = 0; row < game.height; row++) {
             for (int col = 0; col < game.width; col++) {
                 i = 1;
-                if(row < col){
+                if (row < col) {
                     i *= -1;
                 }
-                key = (row * game.width + col)*i;
+                key = (row * game.width + col) * i;
                 if (game.charactersMap.find(key) == game.charactersMap.end()) {
                     output += EMPTY_CELL;
                 } else {
@@ -174,40 +172,35 @@ namespace mtm {
         SharedPtr current_character;
         for (const auto &item : charactersMap) {
             current_character = item.second;
-            if(current_character->getTeam() == POWERLIFTERS){
+            if (current_character->getTeam() == POWERLIFTERS) {
                 powerlifters_present = true;
             } else {
                 crossfitters_present = true;
             }
         }
-        if(winningTeam == nullptr){
+        if (winningTeam == nullptr) {
             return !crossfitters_present || !powerlifters_present;
         }
-        if(powerlifters_present && crossfitters_present){
+        if (powerlifters_present && crossfitters_present) {
             return false;
         }
-        if(powerlifters_present && !crossfitters_present){
+        if (powerlifters_present && !crossfitters_present) {
             *winningTeam = POWERLIFTERS;
             return true;
         }
-        if(!powerlifters_present && crossfitters_present){
+        if (!powerlifters_present && crossfitters_present) {
             *winningTeam = CROSSFITTERS;
             return true;
         }
         return false;
     }
 
-    bool Game::copyCharacterMap(const unordered_map<int, Game::SharedPtr> &characters) {
+    void Game::copyCharacterMap(const unordered_map<int, Game::SharedPtr> &characters) {
         unordered_map<int, SharedPtr> temp_map;
-        for (const auto &item : characters){
-            try{
-                temp_map[item.first] = SharedPtr(item.second->clone());
-            } catch(std::bad_alloc &exception){
-                return false;
-            }
+        for (const auto &item : characters) {
+            temp_map[item.first] = SharedPtr(item.second->clone());
         }
         charactersMap.clear();
         charactersMap = unordered_map<int, SharedPtr>(temp_map);
-        return true;
     }
 }
