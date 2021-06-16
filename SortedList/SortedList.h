@@ -6,8 +6,8 @@ class SortedList {
 private:
     class ListNode {
     public:
-        T value;
         ListNode *nextNode;
+        T value;
 
         explicit ListNode(T value) : nextNode(nullptr), value(value) {};
         ListNode() = default;
@@ -127,13 +127,10 @@ void SortedList<T>::insert(T newElement) {
 
 template<class T>
 class SortedList<T>::OutOfBoundsException : public std::exception {
-    OutOfBoundsException() = default;
 
 public:
-    explicit OutOfBoundsException(int index) : currentIndex(index) {
-        std::out_of_range("List iterator index is out of range.");
-    }
-    int currentIndex;
+    OutOfBoundsException() = default;
+
 };
 
 template<class T>
@@ -186,25 +183,26 @@ SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
     if(this == &list){
         return *this;
     }
-    listLength = list.length();
     copyListContent(list);
+    listLength = list.listLength;
+    return *this;
 }
 
 template<class T>
 void SortedList<T>::copyListContent(const SortedList<T> &from) {
-    //TODO: handle memory allocation failure
-    clearList();
     if(from.listLength == 0){
         return;
     }
     ListNode *dummy = from.head->nextNode;
-    head = new ListNode(from.head->value);
-    ListNode *current_node = head;
-    for (int i = 1; i < listLength; i++) {
+    auto *temp_node = new ListNode(from.head->value);
+    ListNode *current_node = temp_node;
+    for (int i = 1; i < from.listLength; i++) {
         current_node->nextNode = new ListNode(dummy->value);
         dummy = dummy->nextNode;
         current_node = current_node->nextNode;
     }
+    clearList();
+    head = temp_node;
 }
 
 template<class T>
@@ -219,11 +217,11 @@ void SortedList<T>::clearList() {
 
 template<class T>
 SortedList<T>::Iterator::Iterator(const SortedList<T> *sortedList, int index)
-        : sortedList(sortedList), currentIndex(index) {}
+        :  currentIndex(index), sortedList(sortedList) {}
 
 template<class T>
 SortedList<T>::Iterator::Iterator(const SortedList<T>::Iterator &iterator)
-        : sortedList(iterator.sortedList), currentIndex(iterator.currentIndex) {}
+        : currentIndex(iterator.currentIndex), sortedList(iterator.sortedList) {}
 
 template<class T>
 typename SortedList<T>::Iterator &SortedList<T>::Iterator::operator++() {
@@ -247,7 +245,7 @@ bool SortedList<T>::Iterator::operator==(const SortedList<T>::Iterator &iterator
 template<class T>
 const T &SortedList<T>::Iterator::operator*() {
     if (currentIndex >= sortedList->listLength) {
-        throw OutOfBoundsException(currentIndex);
+        throw OutOfBoundsException();
     }
     ListNode *current_node = sortedList->head;
     for (int i = 0; i < currentIndex; i++) {
