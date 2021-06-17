@@ -13,7 +13,7 @@ namespace mtm {
         Soldier(Team team, units_t health, units_t ammo, units_t attack_range, units_t power, CharacterType type);
         Character *clone() const override;
         void reload() override;
-        bool isInAttackRange(GridPoint coordinates) const override;
+        void isInAttackRange(GridPoint coordinates) const override;
         bool isDestinationInRange(GridPoint coordinates) const override;
         void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
                     GridPoint coordinates) override;

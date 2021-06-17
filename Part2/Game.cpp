@@ -4,14 +4,14 @@ namespace mtm {
     Game::Game(int height, int width) : width(width), height(height) {}
 
     Game::Game(const Game &game) : width(game.width), height(game.height) {
-        copyCharacterMap(game.charactersMap);
+        copyCharactersMap(game.charactersMap);
     }
 
     Game &Game::operator=(const Game &game) {
         if (this == &game) {
             return *this;
         }
-        copyCharacterMap(game.charactersMap);
+        copyCharactersMap(game.charactersMap);
         height = game.height;
         width = game.width;
         return *this;
@@ -21,31 +21,27 @@ namespace mtm {
         charactersMap.clear();
     }
 
-    shared_ptr<Character> Game::getCharacterMap(const GridPoint& coordinates, units_t width) {
-        return charactersMap.find((int)Character::calculateKey(coordinates, width))->second;
+    shared_ptr<Character> Game::getCharacterInCell(const GridPoint& dst_coordinates) {
+        return charactersMap.find((int)Character::calculateKey(dst_coordinates, width))->second;
     }
 
-    void Game::eraseCharacterMap(const GridPoint& coordinates, units_t width) {
-        charactersMap.erase((int)Character::calculateKey(coordinates, width));
-    }
-
-    void Game::addCharacterMap(const GridPoint& coordinates, units_t width, const SharedPtr &character) {
+    void Game::addCharacterToMap(const GridPoint& coordinates, const SharedPtr &character) {
         charactersMap[(int)Character::calculateKey(coordinates, width)] = character;
     }
 
-    bool Game::foundCharactersMap(const GridPoint& coordinates, units_t width) {
-        return charactersMap.find((int)Character::calculateKey(coordinates, width)) != charactersMap.end();
+    bool Game::isCellOccupied(const GridPoint& dst_coordinates) {
+        return charactersMap.find((int)Character::calculateKey(dst_coordinates, width)) != charactersMap.end();
     }
 
     void Game::addCharacter(const Game::GridPoint &coordinates, const SharedPtr &character) {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        if (foundCharactersMap(coordinates, width)) {
+        if (isCellOccupied(coordinates)) {
             throw CellOccupied();
         }
         character->setLocation(coordinates);
-        addCharacterMap(coordinates,width,character);
+        addCharacterToMap(coordinates, character);
     }
 
     bool Game::isValidLocation(const Game::GridPoint point) const {
@@ -77,21 +73,19 @@ namespace mtm {
         if (!isValidLocation(src_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        if (!foundCharactersMap(src_coordinates, width)) {
+        if (!isCellOccupied(src_coordinates)) {
             throw CellEmpty();
         }
-        SharedPtr character = getCharacterMap(src_coordinates, width);
-        if (src_coordinates == dst_coordinates) {
-            return;
-        }
-        if (foundCharactersMap(dst_coordinates, width)) {
-            throw CellOccupied();
-        }
+        SharedPtr character = getCharacterInCell(src_coordinates);
         if (!character->isDestinationInRange(dst_coordinates)) {
             throw MoveTooFar();
         }
-        eraseCharacterMap(src_coordinates,width);
-        addCharacterMap(dst_coordinates,width,character);
+        if (isCellOccupied(dst_coordinates)) {
+            throw CellOccupied();
+        }
+
+        charactersMap.erase((int)Character::calculateKey(src_coordinates, width));
+        addCharacterToMap(dst_coordinates, character);
         character->setLocation(dst_coordinates);
     }
 
@@ -99,14 +93,12 @@ namespace mtm {
         if (!isValidLocation(attacker_coordinates) || !isValidLocation(dst_coordinates)) {
             throw IllegalCell();
         }
-        if (!foundCharactersMap(attacker_coordinates, width)) {
+        if (!isCellOccupied(attacker_coordinates)) {
             throw CellEmpty();
         }
-        SharedPtr attacker = getCharacterMap(attacker_coordinates, width);
+        SharedPtr attacker = getCharacterInCell(attacker_coordinates);
 
-        if (!attacker->isInAttackRange(dst_coordinates)) {
-            throw OutOfRange();
-        }
+        attacker->isInAttackRange(dst_coordinates);
         if(attacker->isOutOfAmmo() && attacker->getType()!=MEDIC){
             throw OutOfAmmo();
         }
@@ -118,10 +110,10 @@ namespace mtm {
         if (!isValidLocation(coordinates)) {
             throw IllegalCell();
         }
-        if (!foundCharactersMap(coordinates, width)) {
+        if (!isCellOccupied(coordinates)) {
             throw CellEmpty();
         }
-        SharedPtr character = getCharacterMap(coordinates, width);
+        SharedPtr character = getCharacterInCell(coordinates);
         character->reload();
     }
 
@@ -140,7 +132,7 @@ namespace mtm {
         }
     }
 
-    char cellInOutput(Team team, char CELL_PL , char CELL_CF) {
+    char Game::getBoardCellChar(Team team, char CELL_PL , char CELL_CF) {
         if (team == POWERLIFTERS) {
             return CELL_PL;
         }
@@ -158,13 +150,13 @@ namespace mtm {
                 } else {
                     character = game.charactersMap.find(key)->second;
                     if (character->getType() == SOLDIER) {
-                        output += cellInOutput(character->getTeam(), SOLDIER_CELL_PL, SOLDIER_CELL_CF);
+                        output += Game::getBoardCellChar(character->getTeam(), SOLDIER_CELL_PL, SOLDIER_CELL_CF);
                     }
                     if (character->getType() == MEDIC) {
-                        output += cellInOutput(character->getTeam(),MEDIC_CELL_PL,MEDIC_CELL_CF);
+                        output += Game::getBoardCellChar(character->getTeam(), MEDIC_CELL_PL, MEDIC_CELL_CF);
                     }
                     if (character->getType() == SNIPER) {
-                        output += cellInOutput(character->getTeam(),SNIPER_CELL_PL,SNIPER_CELL_CF);
+                        output += Game::getBoardCellChar(character->getTeam(), SNIPER_CELL_PL, SNIPER_CELL_CF);
                     }
                 }
             }
@@ -201,7 +193,7 @@ namespace mtm {
         return false;
     }
 
-    void Game::copyCharacterMap(const unordered_map<int, Game::SharedPtr> &characters) {
+    void Game::copyCharactersMap(const unordered_map<int, SharedPtr> &characters) {
         unordered_map<int, SharedPtr> temp_map;
         for (const auto &item : characters) {
             temp_map[item.first] = SharedPtr(item.second->clone());

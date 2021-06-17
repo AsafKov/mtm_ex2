@@ -31,7 +31,7 @@ namespace mtm {
         virtual Character *clone() const = 0;
         virtual void reload() = 0;
         virtual bool isDestinationInRange(GridPoint dst_coordinates) const = 0;
-        virtual bool isInAttackRange(GridPoint dst_coordinates) const = 0;
+        virtual void isInAttackRange(GridPoint dst_coordinates) const = 0;
         virtual void attack(const unordered_map<int, SharedPtr> &characters, int boardWidth, int boardHeight,
                             GridPoint dst) = 0;
         static int calculateKey(const GridPoint& coordinates, int width);

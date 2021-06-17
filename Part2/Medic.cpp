@@ -16,8 +16,10 @@ namespace mtm {
         return distanceFromCurrentLocation(coordinates) <= MOVE_RANGE;
     }
 
-    bool Medic::isInAttackRange(GridPoint coordinates) const {
-        return distanceFromCurrentLocation(coordinates) <= attack_range;
+    void Medic::isInAttackRange(GridPoint coordinates) const {
+         if(distanceFromCurrentLocation(coordinates) > attack_range){
+             throw OutOfRange();
+         }
     }
 
     void Medic::attack(const unordered_map<int, SharedPtr> &characters, int width, int height,

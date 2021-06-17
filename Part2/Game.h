@@ -34,7 +34,12 @@ namespace mtm {
         unordered_map<int, SharedPtr> charactersMap;
 
         bool isValidLocation(GridPoint point) const;
-        void copyCharacterMap(const unordered_map<int, SharedPtr> &characters);
+        void copyCharactersMap(const unordered_map<int, SharedPtr> &characters);
+        static char getBoardCellChar(Team team, char CELL_PL , char CELL_CF);
+        void removeDeadCharacters();
+        shared_ptr<Character> getCharacterInCell(const GridPoint& dst_coordinates);
+        bool isCellOccupied(const GridPoint& dst_coordinates);
+        void addCharacterToMap(const GridPoint& coordinates, const SharedPtr &character);
 
     public:
         ~Game();
@@ -42,20 +47,13 @@ namespace mtm {
         Game(const Game &game);
         Game &operator=(const Game &game);
         friend std::ostream &operator<<(std::ostream &os, const Game &game);
-        char cellInOutput(Team team, char CELL_PL , char CELL_CF);
         static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
                                        unit_t power);
         void addCharacter(const GridPoint &coordinates, const SharedPtr &character);
         void move(const GridPoint &src_location, const GridPoint &dst_location);
         void attack(const GridPoint &attacker_location, const GridPoint &destination);
         void reload(const GridPoint &coordinates);
-        void removeDeadCharacters();
         bool isOver(Team *winningTeam = nullptr);
-
-        shared_ptr<Character> getCharacterMap(const GridPoint& dst_coordinates, units_t width);
-        bool foundCharactersMap(const GridPoint& dst_coordinates, units_t width);
-        void eraseCharacterMap(const GridPoint& coordinates, units_t width);
-        void addCharacterMap(const GridPoint& coordinates, units_t width, const SharedPtr &character);
     };
 
     std::ostream &operator<<(std::ostream &os, const Game &game);

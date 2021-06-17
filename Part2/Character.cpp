@@ -43,5 +43,4 @@ namespace mtm {
     units_t Character::distanceFromCurrentLocation(const GridPoint& point) const {
         return GridPoint::distance(this->location, point);
     }
-
 }

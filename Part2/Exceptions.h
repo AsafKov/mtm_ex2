@@ -6,61 +6,63 @@
 using std::string;
 
 namespace mtm {
-    class Exceptions : std::exception {
+    class Exception : std::exception {
+    public:
+        virtual const char * what() = 0;
     };
 
-    class IllegalArgument : public Exceptions{
+    class IllegalArgument : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: IllegalArgument";
         }
     };
 
-    class IllegalCell : public Exceptions{
+    class IllegalCell : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: IllegalCell";
         }
     };
 
-    class CellEmpty : public Exceptions{
+    class CellEmpty : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: CellEmpty";
         }
     };
 
-    class MoveTooFar : public Exceptions{
+    class MoveTooFar : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: MoveTooFar";
         }
     };
 
-    class CellOccupied : public Exceptions{
+    class CellOccupied : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: CellOccupied";
         }
     };
 
-    class OutOfRange : public Exceptions{
+    class OutOfRange : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: OutOfRange";
         }
     };
 
-    class OutOfAmmo : public Exceptions{
+    class OutOfAmmo : public Exception{
         public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: OutOfAmmo";
         }
     };
 
-    class IllegalTarget : public Exceptions{
+    class IllegalTarget : public Exception{
     public:
-        const char * what() const noexcept override{
+        const char * what() noexcept override{
             return "A game related error has occurred: IllegalTarget";
         }
     };

@@ -17,9 +17,11 @@ namespace mtm {
         return distanceFromCurrentLocation(coordinates) <= MOVED_RANGE;
     }
 
-    bool Sniper::isInAttackRange(GridPoint coordinates) const {
-        return distanceFromCurrentLocation(coordinates) <= attack_range
-               && distanceFromCurrentLocation(coordinates) >= ceil((double)attack_range/2);
+    void Sniper::isInAttackRange(GridPoint coordinates) const {
+        if(distanceFromCurrentLocation(coordinates) > attack_range
+               || distanceFromCurrentLocation(coordinates) < ceil((double)attack_range/2)){
+            throw OutOfRange();
+        }
     }
 
     void Sniper::attack(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,

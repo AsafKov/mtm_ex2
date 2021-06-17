@@ -14,7 +14,7 @@ namespace mtm {
         bool isDestinationInRange(GridPoint coordinates) const override;
         void reload() override;
         Character *clone() const override;
-        bool isInAttackRange(GridPoint coordinates) const override;
+        void isInAttackRange(GridPoint coordinates) const override;
         void attack(const unordered_map<int, Character::SharedPtr> &characters, int boardWidth, int boardHeight,
                     GridPoint coordinates) override;
     };

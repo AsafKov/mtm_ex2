@@ -15,15 +15,17 @@ namespace mtm {
         return distanceFromCurrentLocation(coordinates) <= mtm::Soldier::MOVE_RANGE;
     }
 
-    bool Soldier::isInAttackRange(GridPoint coordinates) const {
-        if(coordinates.row != location.row && coordinates.col != location.col){
-            throw IllegalTarget();
+    void Soldier::isInAttackRange(GridPoint coordinates) const {
+        if(distanceFromCurrentLocation(coordinates) > attack_range){
+            throw OutOfRange();
         }
-        return distanceFromCurrentLocation(coordinates) <= attack_range;
     }
 
     void Soldier::attack(const unordered_map<int, Character::SharedPtr> &characters, int width, int height,
                          GridPoint coordinates){
+        if(coordinates.row != location.row && coordinates.col != location.col){
+            throw IllegalTarget();
+        }
         int target_key = calculateKey(coordinates, width);
         updateAmmo();
         if(characters.find(target_key) != characters.end()){
@@ -44,7 +46,7 @@ namespace mtm {
             for (auto j = (units_t)fmax(dst.col - area_radius, 0); j <= fmin(dst.col + area_radius, width); j++){
                 GridPoint current_cell = GridPoint(i, j);
                 currentKey = calculateKey(current_cell, width);
-                if (GridPoint::distance(current_cell, dst) > area_radius) {
+                if (GridPoint::distance(current_cell, dst) > area_radius || GridPoint::distance(current_cell, dst) == 0){
                     continue;
                 }
                 if(characters.find(currentKey) == characters.end()){
