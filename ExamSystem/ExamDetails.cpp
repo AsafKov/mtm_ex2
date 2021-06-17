@@ -65,6 +65,7 @@ ostream& operator<<(ostream &os, const ExamDetails &exam) {
         << exam.duration <<":00"<< endl << "Zoom Link: " << exam.zoomLink << endl;
 }
 
+//TODO: Smaller than 10^-6
 void ExamDetails::isValidDate(double examMonth, double examDay) {
     double decimal_diff_day = examDay - (int)examDay;
     double decimal_diff_month = examMonth - (int)examMonth;

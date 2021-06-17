@@ -24,13 +24,12 @@ namespace mtm {
     const static char SNIPER_CELL_CF = 'n';
 
     class Game {
-        typedef int unit_t;
         typedef mtm::Character Character;
         typedef mtm::GridPoint GridPoint;
         typedef std::shared_ptr<Character> SharedPtr;
 
-        unit_t width;
-        unit_t height;
+        units_t width;
+        units_t height;
         unordered_map<int, SharedPtr> charactersMap;
 
         bool isValidLocation(GridPoint point) const;
@@ -47,8 +46,8 @@ namespace mtm {
         Game(const Game &game);
         Game &operator=(const Game &game);
         friend std::ostream &operator<<(std::ostream &os, const Game &game);
-        static SharedPtr makeCharacter(CharacterType type, Team team, unit_t health, unit_t ammo, unit_t range,
-                                       unit_t power);
+        static SharedPtr makeCharacter(CharacterType type, Team team, units_t health, units_t ammo, units_t range,
+                                       units_t power);
         void addCharacter(const GridPoint &coordinates, const SharedPtr &character);
         void move(const GridPoint &src_location, const GridPoint &dst_location);
         void attack(const GridPoint &attacker_location, const GridPoint &destination);

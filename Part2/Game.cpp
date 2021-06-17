@@ -48,8 +48,8 @@ namespace mtm {
         return (point.row >= 0 && point.row < height) && (point.col >= 0 && point.col < width);
     }
 
-    Game::SharedPtr Game::makeCharacter(CharacterType type, Team team, Game::unit_t health, Game::unit_t ammo,
-                                        Game::unit_t range, Game::unit_t power) {
+    Game::SharedPtr Game::makeCharacter(CharacterType type, Team team, units_t health, units_t ammo,
+                                        units_t range, units_t power) {
         if (health == 0 || range < 0 || ammo < 0 || power < 0) {
             throw IllegalArgument();
         }
