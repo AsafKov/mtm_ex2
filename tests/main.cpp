@@ -22,7 +22,7 @@ void printList(SortedList<T> list) {
     for (auto it = list.begin(); !(it == list.end()); ++it) {
         try{
             cout << *it << endl;
-        } catch (typename SortedList<T>::OutOfBoundsException &exception) {
+        } catch (typename SortedList<T>::OutOfRangeException &exception) {
             cout << exception.what();
             break;
         }
