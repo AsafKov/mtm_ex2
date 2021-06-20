@@ -11786,7 +11786,6 @@ void listTest10()
     cout << "[OK]" << endl;
 }
 
-
 int main ()
 {
     listTest1();
