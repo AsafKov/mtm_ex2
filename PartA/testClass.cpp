@@ -77,7 +77,7 @@ TestClass funky(TestClass d)
 {
     return externalConstructor(d.x * (d.x - 13), 0);
 }
-/*
+
 void listTest1()
 {
     cout << "Running test1 - basics1... ";
@@ -9389,7 +9389,7 @@ void listTest5()
 
     cout << "[OK]" << endl;
 }
-*/
+
 void listTest6()
 {
     cout << "Running test6 - double...  ";
@@ -11789,11 +11789,11 @@ void listTest10()
 
 int main ()
 {
-    /*listTest1();
+    listTest1();
     listTest2();
     listTest3();
     listTest4();
-    //listTest5();*/
+    listTest5();
     listTest6();
     //listTest7();
     listTest8();
