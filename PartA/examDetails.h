@@ -9,9 +9,10 @@ using std::endl;
 #define MTM_EX2_EXAMDETAILS_H
 
 namespace mtm {
+    const static string MATAM_ZOOM_LINK = "https://tinyurl.com/59hzps6m";
     class ExamDetails {
     private:
-        const static char *MATAM_ZOOM_LINK;
+        constexpr const static float ACCEPTED_NUMERIC_ERROR = 1e-6;
         const static int MONTH_LENGTH = 30;
         const static int YEAR_LENGTH = 12;
         const static int MATAM_COURSE_NUMBER = 234124;
@@ -34,14 +35,14 @@ namespace mtm {
         static void isValidArgs(double courseNumber);
 
     public:
-        ExamDetails(double courseId, double examMonth, double examDay, double examHour, double examLength,
-                    string zoomLink = " ");
+        ExamDetails(int courseId, int examMonth, int examDay, double examHour, int duration,
+                    string zoomLink = "");
 
         string getLink() const;
 
-        void setLink(string link);
+        void setLink(const string& link);
 
-        int operator-(const ExamDetails &exam) const;
+        double operator-(const ExamDetails &exam) const;
 
         bool operator<(const ExamDetails &exam) const;
 
@@ -53,13 +54,13 @@ namespace mtm {
 
         static ExamDetails makeMatamExam();
 
-        class InvalidDateException {
+    class InvalidDateException : public std::exception {
         };
 
-        class InvalidTimeException {
+        class InvalidTimeException : public std::exception {
         };
 
-        class InvalidArgsException {
+        class InvalidArgsException : public std::exception {
         };
     };
 }

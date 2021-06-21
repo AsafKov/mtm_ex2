@@ -99,7 +99,6 @@ namespace mtm {
         }
         ListNode *current_node = head;
         ListNode *previous_node = nullptr;
-
         while (current_node != nullptr && current_node->value < newElement) {
             previous_node = current_node;
             current_node = current_node->nextNode;
