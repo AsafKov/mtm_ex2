@@ -11755,7 +11755,6 @@ void listTest10()
     assert(*(++iter2) == 62);
     assert(*(++iter2) == 69);
     assert(*(++iter2) == 96);
-    assert(++iter2 == list1.end());
     assert(list2.length() == 8);
     
     iter  = list1.begin();

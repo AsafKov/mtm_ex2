@@ -222,7 +222,7 @@ namespace mtm {
 
     template<class T>
     bool SortedList<T>::const_iterator::operator==(const SortedList<T>::const_iterator &iterator) const {
-        return currentIndex == iterator.currentIndex;
+        return currentIndex == iterator.currentIndex && sortedList == iterator.sortedList;
     }
 
     template<class T>

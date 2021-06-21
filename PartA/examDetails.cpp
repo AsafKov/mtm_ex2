@@ -76,14 +76,14 @@ namespace mtm {
         if (decimal_diff_month != 0 || decimal_diff_day != 0) {
             throw InvalidDateException();
         }
-        if (examMonth < 1 || examMonth > YEAR_LENGTH || examDay < 0 || examDay > MONTH_LENGTH) {
+        if (examMonth < 1 || examMonth > YEAR_LENGTH || examDay < 1 || examDay > MONTH_LENGTH) {
             throw InvalidDateException();
         }
     }
 
     void ExamDetails::isValidTime(double examHour) {
         double decimal_diff = (examHour - (int) examHour);
-        if ((decimal_diff != 0 && decimal_diff != 0.5) || examHour < 0) {
+        if ((decimal_diff != 0 && decimal_diff != 0.5) || examHour < 0 || examHour > 23.5) {
             throw InvalidTimeException();
         }
     }
