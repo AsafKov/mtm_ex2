@@ -83,9 +83,9 @@ namespace mtm {
         }
     }
 
-    void ExamDetails::isValidTime(double examHour) {
-        double decimal_diff = (examHour - (int) examHour);
-        if ((decimal_diff > ACCEPTED_NUMERIC_ERROR && decimal_diff != 0.5) || examHour < 0 || examHour > 23.5) {
+    void ExamDetails::isValidTime(const double hour) {
+        double decimal_diff = (hour - (int) hour);
+        if ((decimal_diff > ACCEPTED_NUMERIC_ERROR && decimal_diff != 0.5) || hour < 0 || hour > 23.5) {
             throw InvalidTimeException();
         }
     }

@@ -40,6 +40,11 @@ namespace mtm {
         void insert(T newElement);
     };
 
+    /**
+ * @tparam Condition - A boolean function
+ * @param condition - A boolean function that defines the condition the values in the new list must follow
+ * @return - Returns a copy of the sorted list with values that do not pass the given condition removed
+ */
     template<class T>
     template<class Condition>
     SortedList<T> SortedList<T>::filter(Condition condition) const {
@@ -52,6 +57,11 @@ namespace mtm {
         return filtered_list;
     }
 
+    /**
+ * @tparam Modifier - A function that receives a T object and returns a modified T object
+ * @param modifier - The modifying function
+ * @return - A copy of the list with all it's values changed according with the modifier operation
+ */
     template<class T>
     template<class Modifier>
     SortedList<T> SortedList<T>::apply(Modifier modifier) const {
@@ -63,23 +73,41 @@ namespace mtm {
     }
 
     template<class T>
+    /**
+ * Constructs an empty sorted-list
+ */
     SortedList<T>::SortedList() : listLength(0) {}
 
+    /**
+         * Constructs a deep-copy of a given SortedList
+         * @param list
+         */
     template<class T>
     SortedList<T>::SortedList(const SortedList &list) : listLength(list.listLength) {
         copyListContent(list);
     }
 
+    /**
+ * Freeing the memory of the list by freeing each node
+ */
     template<class T>
     SortedList<T>::~SortedList<T>() {
         clearList();
     }
 
+    /**
+     * @tparam T - The values of the sorted list
+     * @return - An iterator that points to the first node of the lost
+     */
     template<class T>
     typename SortedList<T>::const_iterator SortedList<T>::begin() const {
         return const_iterator(this, 0);
     }
 
+    /**
+    * @tparam T - The values of the sorted list
+    * @return - An iterator that points to the place after the last node
+    */
     template<class T>
     typename SortedList<T>::const_iterator SortedList<T>::end() const {
         return const_iterator(this, listLength);
@@ -136,6 +164,10 @@ namespace mtm {
         const T &operator*();
     };
 
+    /**
+    * Removes the node
+    * @param iterator
+    */
     template<class T>
     void SortedList<T>::remove(SortedList::const_iterator iterator) {
         ListNode *dummy = head;
@@ -165,6 +197,10 @@ namespace mtm {
         return *this;
     }
 
+    /**
+ * Copy the contents of a given list into the current list
+ * @param from
+ */
     template<class T>
     void SortedList<T>::copyListContent(const SortedList<T> &from) {
         if (from.listLength == 0) {
@@ -182,6 +218,9 @@ namespace mtm {
         head = temp_node;
     }
 
+    /**
+    *  Deletes every node in the list from the memory
+    */
     template<class T>
     void SortedList<T>::clearList() {
         ListNode *to_delete = nullptr;
@@ -192,14 +231,30 @@ namespace mtm {
         }
     }
 
+    /**
+     * Constructs a list iterator with a given index of a node to point to
+     * @tparam T - Value type of the list
+     * @param sortedList
+     * @param index
+     */
     template<class T>
     SortedList<T>::const_iterator::const_iterator(const SortedList<T> *sortedList, int index)
             :  currentIndex(index), sortedList(sortedList) {}
-
+    /**
+     * Constructs an iterator copy of a given iterator
+     * @tparam T
+     * @param iterator
+     */
     template<class T>
     SortedList<T>::const_iterator::const_iterator(const SortedList<T>::const_iterator &iterator)
             : currentIndex(iterator.currentIndex), sortedList(iterator.sortedList) {}
 
+    /**
+     * advanced the iterator to the next node
+     * @tparam T
+     * @param iterator
+     * @throws out_of_range if the iterator points to the node after the end of the list
+     */
     template<class T>
     typename SortedList<T>::const_iterator &SortedList<T>::const_iterator::operator++() {
         if (currentIndex >= sortedList->listLength) {
@@ -209,6 +264,12 @@ namespace mtm {
         return *this;
     }
 
+    /**
+     * advanced the iterator to the next node
+     * @tparam T
+     * @param iterator
+     * @throws out_of_range if the iterator points to the node after the end of the list
+     */
     template<class T>
     const typename SortedList<T>::const_iterator SortedList<T>::const_iterator::operator++(int) {
         if (currentIndex >= sortedList->listLength) {
@@ -219,11 +280,21 @@ namespace mtm {
         return previous;
     }
 
+    /**
+     * Compares to list iterators
+     * @tparam T
+     * @param iterator
+     * @return True - if the iterators are of the same list and point to the same index
+     */
     template<class T>
     bool SortedList<T>::const_iterator::operator==(const SortedList<T>::const_iterator &iterator) const {
         return currentIndex == iterator.currentIndex && sortedList == iterator.sortedList;
     }
 
+    /**
+     * @tparam T
+     * @return - The value inside the node the iterator currently points to
+     */
     template<class T>
     const T &SortedList<T>::const_iterator::operator*() {
         ListNode *current_node = sortedList->head;
