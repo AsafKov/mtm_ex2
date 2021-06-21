@@ -7,7 +7,7 @@ using std::string;
 
 namespace mtm {
     const static string ERROR_MESSAGE = "A game related error has occurred: ";
-    const static string ILLEGAL_ARGUMENT = "IllegalArguement";
+    const static string ILLEGAL_ARGUMENT = "IllegalArgument";
     const static string ILLEGAL_CELL = "IllegalCell";
     const static string CELL_EMPTY = "CellEmpty";
     const static string MOVED_TOO_FAR = "MoveTooFar";
