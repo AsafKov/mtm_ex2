@@ -4,7 +4,7 @@ mtm::Exception::Exception(const string &message) : message(ERROR_MESSAGE + messa
 
 const char *mtm::Exception::what() const noexcept {
     return message.c_str();
-};
+}
 
 mtm::IllegalArgument::IllegalArgument() : Exception(ILLEGAL_ARGUMENT){}
 
