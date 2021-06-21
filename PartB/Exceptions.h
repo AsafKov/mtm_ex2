@@ -6,65 +6,67 @@
 using std::string;
 
 namespace mtm {
+    const static string ERROR_MESSAGE = "A game related error has occurred: ";
+    const static string ILLEGAL_ARGUMENT = "IllegalArguement";
+    const static string ILLEGAL_CELL = "IllegalCell";
+    const static string CELL_EMPTY = "CellEmpty";
+    const static string MOVED_TOO_FAR = "MoveTooFar";
+    const static string OUT_OF_RANGE = "OutOfRange";
+    const static string CELL_OCCUPIED = "CellOccupied";
+    const static string OUT_OF_AMMO = "OutOfAmmo";
+    const static string ILLEGAL_TARGET = "IllegalTarget";
     class Exception : std::exception {
+        string message;
+
+    protected:
+        ~Exception() override = default;
+       explicit Exception(const string &message);
+
+        Exception() = default;
     public:
-        virtual const char * what() = 0;
+        const char * what() const noexcept override;
     };
 
     class IllegalArgument : public Exception{
         public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: IllegalArgument";
-        }
+        IllegalArgument();
     };
 
     class IllegalCell : public Exception{
-        public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: IllegalCell";
-        }
+    public:
+        IllegalCell();
     };
 
     class CellEmpty : public Exception{
-        public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: CellEmpty";
-        }
+    public:
+        CellEmpty();
     };
 
     class MoveTooFar : public Exception{
-        public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: MoveTooFar";
-        }
+    public:
+        MoveTooFar();
+
     };
 
     class CellOccupied : public Exception{
-        public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: CellOccupied";
-        }
+    public:
+        CellOccupied();
+
     };
 
     class OutOfRange : public Exception{
-        public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: OutOfRange";
-        }
+    public:
+        OutOfRange();
     };
 
     class OutOfAmmo : public Exception{
-        public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: OutOfAmmo";
-        }
+    public:
+        OutOfAmmo();
     };
 
     class IllegalTarget : public Exception{
     public:
-        const char * what() noexcept override{
-            return "A game related error has occurred: IllegalTarget";
-        }
+        IllegalTarget();
     };
 }
 

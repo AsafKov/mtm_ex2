@@ -21,16 +21,16 @@ namespace mtm {
         charactersMap.clear();
     }
 
-    shared_ptr<Character> Game::getCharacterInCell(const GridPoint& dst_coordinates) {
-        return charactersMap.find((int)Character::calculateKey(dst_coordinates, width))->second;
+    shared_ptr<Character> Game::getCharacterInCell(const GridPoint& cell_coordinates) {
+        return charactersMap.find((int)Character::calculateKey(cell_coordinates, width))->second;
     }
 
     void Game::addCharacterToMap(const GridPoint& coordinates, const SharedPtr &character) {
         charactersMap[(int)Character::calculateKey(coordinates, width)] = character;
     }
 
-    bool Game::isCellOccupied(const GridPoint& dst_coordinates) {
-        return charactersMap.find((int)Character::calculateKey(dst_coordinates, width)) != charactersMap.end();
+    bool Game::isCellOccupied(const GridPoint& cell_coordinates) {
+        return charactersMap.find((int)Character::calculateKey(cell_coordinates, width)) != charactersMap.end();
     }
 
     void Game::addCharacter(const Game::GridPoint &coordinates, const SharedPtr &character) {
@@ -89,8 +89,8 @@ namespace mtm {
         character->setLocation(dst_coordinates);
     }
 
-    void Game::attack(const GridPoint &attacker_coordinates, const GridPoint &dst_coordinates) {
-        if (!isValidLocation(attacker_coordinates) || !isValidLocation(dst_coordinates)) {
+    void Game::attack(const GridPoint &attacker_coordinates, const GridPoint &target_coordinates) {
+        if (!isValidLocation(attacker_coordinates) || !isValidLocation(target_coordinates)) {
             throw IllegalCell();
         }
         if (!isCellOccupied(attacker_coordinates)) {
@@ -98,11 +98,11 @@ namespace mtm {
         }
         SharedPtr attacker = getCharacterInCell(attacker_coordinates);
 
-        attacker->isInAttackRange(dst_coordinates);
+        attacker->isInAttackRange(target_coordinates);
         if(attacker->isOutOfAmmo() && attacker->getType()!=MEDIC){
             throw OutOfAmmo();
         }
-        attacker->attack(charactersMap, width, height, dst_coordinates);
+        attacker->attack(charactersMap, width, height, target_coordinates);
         removeDeadCharacters();
     }
 

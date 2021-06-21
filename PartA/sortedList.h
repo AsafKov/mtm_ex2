@@ -3,17 +3,19 @@
 #include <cstdlib>
 #include <cassert>
 #include <stdexcept>
+using std::string;
 
 namespace mtm {
+    const static string ERROR_OUT_OF_RANGE = "Out of range exception occurred.";
     template<class T>
     class SortedList {
     private:
         class ListNode {
+            ListNode() = default;
         public:
             ListNode *nextNode;
             T value;
             explicit ListNode(T value) : nextNode(nullptr), value(value) {};
-            ListNode() = default;
             ~ListNode() = default;
         };
 
@@ -258,7 +260,7 @@ namespace mtm {
     template<class T>
     typename SortedList<T>::const_iterator &SortedList<T>::const_iterator::operator++() {
         if (currentIndex >= sortedList->listLength) {
-            throw std::out_of_range("out of range");
+            throw std::out_of_range(ERROR_OUT_OF_RANGE);
         }
         ++currentIndex;
         return *this;
@@ -273,7 +275,7 @@ namespace mtm {
     template<class T>
     const typename SortedList<T>::const_iterator SortedList<T>::const_iterator::operator++(int) {
         if (currentIndex >= sortedList->listLength) {
-            throw std::out_of_range("out of range");
+            throw std::out_of_range(ERROR_OUT_OF_RANGE);
         }
         const_iterator previous = *this;
         ++*this;

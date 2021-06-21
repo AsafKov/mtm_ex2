@@ -23,6 +23,8 @@ namespace mtm {
         const static int MATAM_EXAM_DAY = 28;
         const static int MATAM_EXAM_HOUR = 13;
         const static int MATAM_EXAM_DURATION = 3;
+        constexpr const static double LATEST_STARTING_HOUR = 23.5;
+        constexpr const static double DECIMAL_DIFF_HOUR = 0.5;
 
         int courseId;
         int examMonth;
@@ -36,7 +38,7 @@ namespace mtm {
          * @param hour - Exam stating hour
          * @throws InvalidTimeException
          */
-        static const void isValidTime(double hour);
+        static void isValidTime(double hour);
 
         /**
          * Checks if the date and month inserted are valid

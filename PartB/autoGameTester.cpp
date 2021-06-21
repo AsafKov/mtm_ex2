@@ -84,7 +84,7 @@ int main()
             }
             cout << game << endl;
         }
-        catch(mtm::Exception & e)
+        catch(const mtm::Exception & e)
         {
             cout << e.what() << endl;
         }
