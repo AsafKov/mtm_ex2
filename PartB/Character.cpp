@@ -5,11 +5,11 @@ namespace mtm {
     int Character::calculateKey(const GridPoint& coordinates, int width) {
         int row = coordinates.row;
         int col = coordinates.col;
-        int i = 1;
+        int key = (row * width + col);
         if(row < col){
-            i *= -1;
+            return -key;
         }
-        return (row * width + col) * i;
+        return key;
     }
 
     Team Character::getTeam() const {
@@ -40,7 +40,7 @@ namespace mtm {
         this->location = coordinates;
     }
 
-    units_t Character::distanceFromCurrentLocation(const GridPoint& point) const {
-        return GridPoint::distance(this->location, point);
+    units_t Character::distanceFromCurrentLocation(const GridPoint& coordinates) const {
+        return GridPoint::distance(this->location, coordinates);
     }
 }

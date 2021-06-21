@@ -8,11 +8,11 @@ namespace mtm {
     }
 
     void Soldier::reload() {
-        this->ammo += mtm::Soldier::RELOAD_CREDIT;
+        this->ammo += RELOAD_CREDIT;
     }
 
     bool Soldier::isDestinationInRange(GridPoint coordinates) const{
-        return distanceFromCurrentLocation(coordinates) <= mtm::Soldier::MOVE_RANGE;
+        return distanceFromCurrentLocation(coordinates) <= MOVE_RANGE;
     }
 
     void Soldier::isInAttackRange(GridPoint coordinates) const {
@@ -27,9 +27,9 @@ namespace mtm {
             throw IllegalTarget();
         }
         int target_key = calculateKey(coordinates, width);
+        SharedPtr target = characters.find(target_key)->second;
         updateAmmo();
         if(characters.find(target_key) != characters.end()){
-            SharedPtr target = characters.find(target_key)->second;
             if(team != target->getTeam()){
                 target->dealDamage(power);
             }

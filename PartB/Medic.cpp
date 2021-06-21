@@ -9,7 +9,7 @@ namespace mtm {
     }
 
     void Medic::reload() {
-        this->ammo += mtm::Medic::RELOAD_CREDIT;
+        this->ammo += Medic::RELOAD_CREDIT;
     }
 
     bool Medic::isDestinationInRange(GridPoint coordinates) const {
