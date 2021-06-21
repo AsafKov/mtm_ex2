@@ -28,6 +28,10 @@ namespace mtm {
         int duration;
         string zoomLink;
 
+        /**
+         * Check
+         * @param hour
+         */
         static void isValidTime(double hour);
 
         static void isValidDate(double month, double day);
