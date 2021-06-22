@@ -14,14 +14,6 @@ namespace mtm {
         this->zoomLink = std::move(zoomLink);
     }
 
-    string ExamDetails::getLink() const {
-        return this->zoomLink;
-    }
-
-    void ExamDetails::setLink(const string& link) {
-        this->zoomLink = link;
-    }
-
     double ExamDetails::operator-(const ExamDetails &exam) const {
         int exam1_days_total = this->examMonth * MONTH_LENGTH + this->examDay;
         int exam2_days_total = exam.examMonth * MONTH_LENGTH + exam.examDay;
@@ -69,12 +61,10 @@ namespace mtm {
     }
 
     ostream &operator<<(ostream &os, const ExamDetails &exam) {
-        return os << "Course Number: " << exam.courseId << std::endl << "Time: " << exam.examDay << "."
-                  << exam.examMonth << " at "
-                  << (int) exam.examHour << ":"
-                  << ((exam.examHour - (int) exam.examHour <= ExamDetails::ACCEPTED_NUMERIC_ERROR) ? "00" : "30")
-                  << std::endl << "Duration: "
-                  << exam.duration << ":00" << std::endl << "Zoom Link: " << exam.zoomLink << std::endl;
+        return os << "Course Number: " << exam.courseId << std::endl
+        << "Time: " << exam.examDay << "."<< exam.examMonth << " at "<< (int) exam.examHour << ":"
+        << ((exam.examHour - (int) exam.examHour <= ExamDetails::ACCEPTED_NUMERIC_ERROR) ? "00" : "30")<< std::endl
+        << "Duration: "<< exam.duration << ":00" << std::endl << "Zoom Link: " << exam.zoomLink << std::endl;
     }
 
     void ExamDetails::isValidDate(double examMonth, double examDay) {
@@ -85,7 +75,8 @@ namespace mtm {
 
     void ExamDetails::isValidTime(double hour) {
         double decimal_diff = (hour - (int) hour);
-        if ((decimal_diff > ACCEPTED_NUMERIC_ERROR && decimal_diff != DECIMAL_DIFF_HOUR) || hour < 0 || hour > LATEST_STARTING_HOUR) {
+        if ((decimal_diff > ACCEPTED_NUMERIC_ERROR && decimal_diff != DECIMAL_DIFF_HOUR)
+            || hour < 0 || hour > LATEST_STARTING_HOUR){
             throw InvalidTimeException();
         }
     }

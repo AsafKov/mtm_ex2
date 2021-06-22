@@ -200,9 +200,9 @@ namespace mtm {
     }
 
     /**
- * Copy the contents of a given list into the current list
- * @param from
- */
+     * Copy the contents of a given list into the current list
+     * @param from
+     */
     template<class T>
     void SortedList<T>::copyListContent(const SortedList<T> &from) {
         if (from.listLength == 0) {

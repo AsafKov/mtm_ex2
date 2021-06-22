@@ -71,13 +71,17 @@ namespace mtm {
         /**
          * @return Get zoom link of the exam
          */
-        string getLink() const;
+        inline string getLink() const {
+            return zoomLink;
+        };
 
         /**
          * Set zoom link of the exam
          * @param link
          */
-        void setLink(const string &link);
+        inline void setLink(const string &link) {
+            this->zoomLink = link;
+        };
 
         /**
          * @param exam

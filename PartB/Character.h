@@ -60,35 +60,49 @@ namespace mtm {
         /**
          * @return character team - POWERLIFTERS/ CROSSFITTERS
          */
-        Team getTeam() const;
+        inline Team getTeam() const {
+            return team;}
+            ;
         /**
          * @return character type SOLDIER/MEDIC/SNIPER
          */
-        CharacterType getType() const;
+        inline CharacterType getType() const {
+            return type;
+        };
         /**
          * causing damage to health units
          * @param damage
          */
-        void dealDamage(units_t damage);
+        inline void dealDamage(units_t damage) {
+            health-=damage;
+        };
         /**
          *
          * @return True if character is dead and has no more health units, false otherwise
          */
-        bool isDead() const;
+        inline bool isDead() const {
+            return health <= 0;
+        };
         /**
          *
          * @return True if ammunition left is smaller than ammunition cost
          */
-        bool isOutOfAmmo() const;
+        inline bool isOutOfAmmo() const{
+            return (ammo < AMMO_COST);
+        };
         /**
          * removing ammunition cost from ammunition left
          */
-        void updateAmmo();
+        inline void updateAmmo() {
+            ammo -= AMMO_COST;
+        };
         /**
          * updating coordinates for character
          * @param coordinates
          */
-        void setLocation(const GridPoint& coordinates);
+        inline void setLocation(const GridPoint& coordinates) {
+            location = coordinates;
+        };
         /**
          *
          * @param coordinates
